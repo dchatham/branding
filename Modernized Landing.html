@@ -1,0 +1,1453 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Candosa — gestoría por WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@300;400;500;600;700;800;900&family=Funnel+Sans:wght@300;400;500;600;700;800&family=Funnel+Display:wght@300;400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Hanken+Grotesk:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+:root {
+  /* tweakable */
+  --font-display: "Albert Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Albert Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --accent: #F03906;
+  --ink: #11212d;
+  --ink-soft: #2c3a47;
+  --muted: #6b7480;
+  --muted-soft: #8a929c;
+  --line: rgba(17,33,45,0.08);
+  --line-soft: rgba(17,33,45,0.05);
+  --surface: #F4EFE9;
+  --surface-soft: #ECE6DE;
+  --card: #ffffff;
+  --card-soft: rgba(255,255,255,0.7);
+  --chip: rgba(17,33,45,0.04);
+
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --r-pill: 999px;
+
+  --maxw: 1240px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
+  overflow-x: hidden;
+}
+::selection { background: var(--ink); color: #fff; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ─── Display type ─── */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  color: var(--ink);
+}
+.display.lighter { font-weight: 400; }
+
+/* Accent treatments — toggled via data-accent on <body> */
+.hl { position: relative; white-space: nowrap; }
+/* default: highlight underline */
+body[data-accent="underline"] .hl {
+  background-image: linear-gradient(180deg, transparent 62%, color-mix(in oklab, var(--accent), white 70%) 62%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  padding: 0 0.06em;
+  border-radius: 4px;
+}
+body[data-accent="solid"] .hl { color: var(--accent); }
+body[data-accent="italic"] .hl {
+  color: var(--accent);
+  font-family: "Instrument Serif", "Bricolage Grotesque", serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+body[data-accent="bold"] .hl { font-weight: 800; color: var(--ink); }
+
+/* ─── Top bar ─── */
+.banner {
+  background: var(--ink);
+  color: #fff;
+  text-align: center;
+  font-size: 13px;
+  padding: 9px 16px;
+  letter-spacing: -0.005em;
+  font-weight: 400;
+}
+.banner b { font-weight: 600; color: #fff; }
+.banner .dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  margin: 0 10px 1px;
+  vertical-align: middle;
+}
+
+nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in oklab, var(--surface) 80%, white 0%);
+  backdrop-filter: saturate(140%) blur(14px);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.nav-row {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.brand {
+  display: flex; align-items: center; gap: 9px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.025em;
+}
+.brand .mark {
+  width: 26px; height: 26px;
+  border-radius: 999px;
+  background: var(--accent);
+  display: grid; place-items: center;
+  color: #fff; font-size: 14px;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 18%, transparent);
+}
+.nav-links {
+  display: flex; gap: 4px;
+  margin-left: 24px;
+}
+.nav-links a {
+  font-size: 14.5px; font-weight: 500;
+  padding: 8px 12px;
+  color: var(--ink-soft);
+  border-radius: 8px;
+  transition: background .15s, color .15s;
+}
+.nav-links a:hover { background: var(--chip); color: var(--ink); }
+.nav-cta {
+  margin-left: auto;
+  display: flex; gap: 8px; align-items: center;
+}
+.nav-cta .ghost {
+  font-size: 14px; font-weight: 500;
+  padding: 9px 14px;
+  border-radius: var(--r-pill);
+  color: var(--ink);
+}
+.nav-cta .ghost:hover { background: var(--chip); }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  padding: 11px 18px;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: #fff;
+  letter-spacing: -0.005em;
+  transition: transform .12s ease, background .15s;
+}
+.btn:hover { background: #000; }
+.btn.lg {
+  font-size: 15.5px;
+  padding: 16px 24px;
+}
+.btn.lg svg { width: 18px; height: 18px; }
+.btn-ghost {
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--line);
+}
+.btn-ghost:hover { background: var(--chip); border-color: rgba(17,33,45,0.18); }
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.3) inset, 0 8px 20px -8px color-mix(in oklab, var(--accent) 60%, transparent);
+}
+.btn-accent:hover { background: color-mix(in oklab, var(--accent) 88%, black); }
+
+/* ─── Hero ─── */
+.hero {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 56px 32px 40px;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 64px;
+  align-items: center;
+  position: relative;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  width: 520px; height: 520px;
+  background: radial-gradient(circle at center, color-mix(in oklab, var(--accent) 40%, transparent), transparent 65%);
+  top: -120px; right: -120px;
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+}
+.hero > * { position: relative; z-index: 1; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  padding: 6px 12px 6px 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  letter-spacing: -0.005em;
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+.eyebrow .pulse {
+  width: 7px; height: 7px;
+  border-radius: 999px;
+  background: var(--accent);
+  position: relative;
+}
+.eyebrow .pulse::after {
+  content: ""; position: absolute; inset: -3px;
+  border-radius: 999px;
+  background: var(--accent);
+  opacity: .3;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: .25; }
+  50% { transform: scale(1.6); opacity: 0; }
+}
+
+h1.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6.4vw, 92px);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  margin: 0 0 24px;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.hero p.lede {
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 520px;
+  margin: 0 0 32px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+
+.hero-ctas {
+  display: flex; gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.hero-meta {
+  display: flex; gap: 28px;
+  font-size: 13.5px;
+  color: var(--muted);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.hero-meta b { color: var(--ink); font-weight: 600; }
+.hero-meta .sep { width: 1px; height: 12px; background: var(--line); }
+
+/* avatars stack */
+.avstack { display: flex; align-items: center; gap: 10px; }
+.avs { display: flex; }
+.avs span {
+  width: 26px; height: 26px;
+  border-radius: 999px;
+  border: 2px solid var(--surface);
+  display: grid; place-items: center;
+  font-size: 11px; font-weight: 600;
+  color: #fff;
+  margin-left: -8px;
+}
+.avs span:first-child { margin-left: 0; }
+.avs span:nth-child(1) { background: #E07A5F; }
+.avs span:nth-child(2) { background: #6A8E7F; }
+.avs span:nth-child(3) { background: #C08B5E; }
+.avs span:nth-child(4) { background: #3D5A80; }
+.avs span:nth-child(5) { background: #B85D3A; }
+
+/* ─── Phone (modernized) ─── */
+.phone-stage {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.phone {
+  width: 320px;
+  height: 640px;
+  background: #0a0d12;
+  border-radius: 44px;
+  padding: 6px;
+  box-shadow:
+    0 0 0 1.5px rgba(255,255,255,0.06) inset,
+    0 30px 80px -20px rgba(10,13,18,0.35),
+    0 8px 24px -8px rgba(10,13,18,0.2);
+  position: relative;
+}
+.phone::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 45px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.12), transparent 30%, transparent 70%, rgba(255,255,255,0.04));
+  pointer-events: none;
+}
+.screen {
+  width: 100%; height: 100%;
+  background: #ECE5DD;
+  border-radius: 38px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+.island {
+  position: absolute; top: 9px; left: 50%;
+  transform: translateX(-50%);
+  width: 96px; height: 26px;
+  background: #0a0d12;
+  border-radius: 999px;
+  z-index: 4;
+}
+.chat-head {
+  background: #075E54;
+  color: #fff;
+  padding: 42px 14px 12px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-body);
+}
+.chat-head .av {
+  width: 34px; height: 34px;
+  border-radius: 999px;
+  background: var(--accent);
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 13px;
+}
+.chat-head .name { font-size: 13.5px; font-weight: 600; letter-spacing: -0.01em; }
+.chat-head .st { font-size: 10.5px; color: rgba(255,255,255,0.75); }
+.chat-body {
+  flex: 1;
+  padding: 14px 12px;
+  display: flex; flex-direction: column;
+  gap: 6px;
+  background-image:
+    radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 18px 18px;
+  overflow: hidden;
+}
+.bubble {
+  max-width: 80%;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.07);
+  font-family: var(--font-body);
+  letter-spacing: -0.005em;
+  animation: bubbleIn .25s ease-out both;
+}
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(4px) scale(0.95); }
+  to { opacity: 1; transform: none; }
+}
+.bubble.them { background: #fff; align-self: flex-start; border-top-left-radius: 3px; }
+.bubble.me { background: #DCF8C6; align-self: flex-end; border-top-right-radius: 3px; }
+.bubble .ts { font-size: 9px; color: rgba(0,0,0,0.4); margin-left: 6px; }
+.bubble.file {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff;
+  padding: 8px 10px;
+  font-weight: 500;
+}
+.bubble.file .ic {
+  width: 26px; height: 30px;
+  border-radius: 4px;
+  background: #fbe7da;
+  display: grid; place-items: center;
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.bubble.typing {
+  background: #fff;
+  align-self: flex-start;
+  display: flex; gap: 4px;
+  padding: 9px 12px;
+}
+.bubble.typing span {
+  width: 5px; height: 5px;
+  border-radius: 999px;
+  background: #99a;
+  animation: blink 1.2s infinite;
+}
+.bubble.typing span:nth-child(2) { animation-delay: .2s; }
+.bubble.typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes blink {
+  0%, 100% { opacity: .3; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-2px); }
+}
+.chat-input {
+  padding: 8px 10px 12px;
+  background: #F0F0F0;
+  display: flex; align-items: center; gap: 8px;
+}
+.chat-input .box {
+  flex: 1;
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.chat-input .send {
+  width: 32px; height: 32px;
+  border-radius: 999px;
+  background: #075E54;
+  color: #fff;
+  display: grid; place-items: center;
+}
+
+/* floating note */
+.note {
+  position: absolute;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: var(--ink);
+  font-weight: 500;
+  box-shadow: 0 12px 28px -10px rgba(10,13,18,0.15);
+  display: flex; align-items: center; gap: 9px;
+}
+.note .ic {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  background: color-mix(in oklab, var(--accent) 12%, white);
+  color: var(--accent);
+  display: grid; place-items: center;
+  font-size: 12px;
+}
+.note.tl { top: 60px; left: -36px; transform: rotate(-3deg); }
+.note.br { bottom: 88px; right: -42px; transform: rotate(2deg); }
+
+/* ─── Logo strip ─── */
+.logos {
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  background: color-mix(in oklab, var(--surface) 50%, white);
+  margin: 24px 0 0;
+}
+.logos-row {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 22px 32px;
+  display: flex; align-items: center; gap: 28px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.logos-row .label {
+  font-size: 12.5px;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+.logos-row .label b { color: var(--ink); font-weight: 600; }
+.logos-marks {
+  display: flex; gap: 32px;
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  color: var(--ink-soft);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  flex-wrap: wrap;
+  opacity: 0.7;
+}
+.logos-marks i { font-style: normal; }
+.logos-marks i.italic { font-style: italic; font-weight: 400; font-family: "Instrument Serif", serif; font-size: 19px; }
+
+/* ─── Section ─── */
+section.s {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 96px 32px;
+}
+section.s.tight { padding-top: 64px; padding-bottom: 64px; }
+
+.s-head {
+  display: flex; align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+.s-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+  max-width: 720px;
+  text-wrap: balance;
+}
+.kicker {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* ─── Steps ─── */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.step {
+  background: var(--card);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: 22px 22px 26px;
+  display: flex; flex-direction: column;
+  gap: 24px;
+  min-height: 200px;
+  transition: border-color .2s, transform .2s;
+}
+.step:hover { border-color: var(--line); transform: translateY(-2px); }
+.step .num {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+.step h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  margin: 0 0 8px;
+  color: var(--ink);
+  line-height: 1.05;
+}
+.step p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  letter-spacing: -0.005em;
+}
+
+/* ─── Benefits — bento ─── */
+.bento {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  min-height: 540px;
+}
+.tile {
+  background: var(--card);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s, transform .2s;
+}
+.tile:hover { border-color: var(--line); transform: translateY(-2px); }
+.tile h3 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  margin: 0 0 8px;
+  color: var(--ink);
+  max-width: 16ch;
+}
+.tile p {
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 32ch;
+  letter-spacing: -0.005em;
+}
+.tile.big { grid-row: span 2; }
+.tile .visual { margin-top: 24px; }
+.tile .illus {
+  width: 100%; max-width: 220px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  margin-top: 24px;
+  align-self: flex-end;
+}
+.tile .illus img { width: 100%; display: block; }
+
+/* invoice mock inside big tile */
+.invoice {
+  background: linear-gradient(180deg, #fff, #faf7f3);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 16px;
+  margin-top: 28px;
+  box-shadow: 0 12px 32px -16px rgba(10,13,18,0.18);
+  font-size: 12px;
+  color: var(--ink-soft);
+  display: grid;
+  gap: 8px;
+}
+.invoice .row { display: flex; justify-content: space-between; }
+.invoice .row b { color: var(--ink); font-weight: 600; }
+.invoice .head {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--line);
+  margin-bottom: 6px;
+}
+.invoice .head .lbl { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.invoice .head .num {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+.invoice .total {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  display: flex; justify-content: space-between;
+  font-size: 14px;
+}
+.invoice .total b {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.invoice .pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #079453;
+  background: rgba(7, 148, 83, 0.1);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+.invoice .pill::before { content: "✓"; }
+
+/* Timeline tile */
+.timeline {
+  margin-top: 24px;
+  display: flex; flex-direction: column;
+  gap: 8px;
+}
+.timeline-row {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12.5px;
+}
+.timeline-row .dot {
+  width: 9px; height: 9px;
+  border-radius: 999px;
+  background: var(--ink);
+  flex-shrink: 0;
+}
+.timeline-row.up .dot { background: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 20%, transparent); }
+.timeline-row .date { font-weight: 600; color: var(--ink); width: 60px; }
+.timeline-row .label { color: var(--ink-soft); flex: 1; }
+.timeline-row .tag {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.timeline-row .tag.up { background: color-mix(in oklab, var(--accent) 14%, white); color: var(--accent); }
+.timeline-row .tag.done { background: rgba(7, 148, 83, 0.1); color: #079453; }
+
+/* Avatar tile */
+.gestor-card {
+  margin-top: 24px;
+  background: linear-gradient(180deg, var(--surface-soft), #fff);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.gestor-card .ph {
+  width: 48px; height: 48px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #C08B5E, #E07A5F);
+  display: grid; place-items: center;
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+}
+.gestor-card .info { font-size: 13px; }
+.gestor-card .info b { display: block; color: var(--ink); font-weight: 600; }
+.gestor-card .info span { color: var(--muted); font-size: 12px; }
+
+/* ─── Numbers strip ─── */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.num-cell {
+  padding: 36px 24px;
+  border-right: 1px solid var(--line);
+}
+.num-cell:last-child { border-right: none; }
+.num-cell .v {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 4vw, 60px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.num-cell .v sup {
+  font-size: 0.5em;
+  vertical-align: super;
+  color: var(--accent);
+  font-weight: 600;
+}
+.num-cell .l {
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: -0.005em;
+  max-width: 22ch;
+}
+
+/* ─── Comparison ─── */
+.comp {
+  display: grid;
+  grid-template-columns: 220px repeat(3, 1fr);
+  background: var(--card);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+}
+.comp .ch {
+  padding: 24px 22px;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: 14px;
+  color: var(--ink-soft);
+  letter-spacing: -0.005em;
+}
+.comp .ch.first { font-weight: 600; color: var(--ink); }
+.comp .ch.title {
+  background: var(--surface-soft);
+  padding: 22px 22px 22px;
+}
+.comp .ch.title.you {
+  background: color-mix(in oklab, var(--accent) 8%, white);
+}
+.comp .ch.title .name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.comp .ch.title.you .name { color: var(--accent); }
+.comp .ch.title .sub {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.comp .ch.you {
+  background: color-mix(in oklab, var(--accent) 6%, white);
+  font-weight: 500;
+  color: var(--ink);
+}
+.comp .ch:last-child { border-bottom: none; }
+.comp .ch.row-last { border-bottom: none; }
+.yes { color: #079453; font-weight: 700; }
+.no { color: #b5b8be; font-weight: 600; }
+
+/* ─── Pricing snippet ─── */
+.cta-band {
+  margin: 96px 32px;
+  max-width: var(--maxw);
+  margin-left: auto; margin-right: auto;
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--r-xl);
+  padding: 64px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-band::before {
+  content: "";
+  position: absolute;
+  width: 340px; height: 340px;
+  background: radial-gradient(circle, color-mix(in oklab, var(--accent) 70%, transparent), transparent 65%);
+  right: -80px; top: -80px;
+  filter: blur(40px);
+  opacity: 0.5;
+}
+.cta-band > * { position: relative; z-index: 1; }
+.cta-band h2 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 3.6vw, 54px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: #fff;
+  text-wrap: balance;
+}
+.cta-band p {
+  font-size: 16.5px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+  margin: 0 0 28px;
+  letter-spacing: -0.005em;
+  max-width: 32ch;
+}
+.cta-band .btn-accent { padding: 16px 24px; font-size: 16px; }
+.cta-band .price-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-lg);
+  padding: 28px;
+  backdrop-filter: blur(10px);
+}
+.cta-band .price-card .lbl {
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 14px;
+}
+.cta-band .price-card .px {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  color: #fff;
+}
+.cta-band .price-card .px small {
+  font-size: 17px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+  margin-left: 8px;
+  letter-spacing: -0.005em;
+}
+.cta-band .price-card .feats {
+  margin-top: 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cta-band .price-card .feats div {
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+  display: flex; align-items: center; gap: 8px;
+}
+.cta-band .price-card .feats div::before {
+  content: "→";
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─── Footer ─── */
+footer {
+  padding: 64px 32px 40px;
+  background: var(--surface);
+  border-top: 1px solid var(--line-soft);
+}
+.foot-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr;
+  gap: 32px;
+}
+.foot-col h4 {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 14px;
+  font-weight: 600;
+}
+.foot-col ul { list-style: none; padding: 0; margin: 0; }
+.foot-col li { margin-bottom: 8px; }
+.foot-col a {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  transition: color .15s;
+}
+.foot-col a:hover { color: var(--ink); }
+.foot-brand-cell h3 {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 5.5vw, 88px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+.foot-brand-cell p {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  max-width: 32ch;
+  margin: 0 0 20px;
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+}
+.foot-bottom {
+  max-width: var(--maxw);
+  margin: 40px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid var(--line-soft);
+  display: flex; justify-content: space-between;
+  font-size: 13px;
+  color: var(--muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; padding: 40px 24px 24px; gap: 40px; }
+  .nav-links { display: none; }
+  .steps { grid-template-columns: 1fr 1fr; }
+  .bento { grid-template-columns: 1fr; min-height: auto; }
+  .bento .tile.big { grid-row: auto; }
+  .numbers { grid-template-columns: 1fr 1fr; }
+  .num-cell:nth-child(2) { border-right: none; }
+  .num-cell:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .comp { grid-template-columns: 140px repeat(3, 1fr); font-size: 12px; }
+  .cta-band { grid-template-columns: 1fr; padding: 40px 28px; margin: 60px 24px; }
+  .foot-inner { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body data-accent="underline" data-screen-label="Modernized landing">
+
+<div class="banner">
+  <span class="dot"></span>
+  Porque te queremos (con nosotros) — <b>25% de descuento</b> ya aplicado para nuevos clientes
+  <span class="dot"></span>
+</div>
+
+<nav>
+  <div class="nav-row">
+    <a href="#" class="brand">
+      <span class="mark">C</span>
+      Candosa
+    </a>
+    <div class="nav-links">
+      <a href="#how">Cómo funciona</a>
+      <a href="#ventajas">Ventajas</a>
+      <a href="#vs">Comparativa</a>
+      <a href="#precios">Precios</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#" class="ghost">Entrar</a>
+      <a href="#" class="btn">Empieza ahora</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">
+      <span class="pulse"></span>
+      Respondemos en menos de 2 horas · L–S
+    </div>
+    <h1 class="hero-title">Tu gestoría, <span class="hl">por WhatsApp.</span></h1>
+    <p class="lede">Facturas, IVA, IRPF y trámites. Todo desde el chat que ya usas — con una persona de verdad apoyada en IA fiscal española.</p>
+    <div class="hero-ctas">
+      <a href="#" class="btn lg">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.96 9.96 0 0 0-8.5 15.18L2 22l4.96-1.51a9.96 9.96 0 1 0 5.08-18.5Zm5.66 14.06c-.24.67-1.41 1.28-1.96 1.35-.51.07-1.13.1-1.83-.11-.42-.13-.96-.32-1.66-.61-2.92-1.26-4.83-4.14-4.98-4.34-.15-.2-1.19-1.59-1.19-3.03 0-1.44.76-2.15 1.03-2.45.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.66.5.24.58.81 2 .88 2.14.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.3.29-.13.57.17.29.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.36 1.46.29.14.46.12.63-.07.17-.2.72-.84.92-1.13.19-.29.39-.24.66-.14.27.1 1.7.8 1.99.95.29.14.49.21.56.34.07.13.07.74-.17 1.41Z"/></svg>
+        Empieza por WhatsApp
+      </a>
+      <a href="#" class="btn btn-ghost lg">Ver cómo funciona →</a>
+    </div>
+    <div class="hero-meta">
+      <div class="avstack">
+        <div class="avs">
+          <span>M</span><span>J</span><span>L</span><span>A</span><span>R</span>
+        </div>
+        <span><b>1.240</b> autónomos</span>
+      </div>
+      <div class="sep"></div>
+      <span>Sin permanencia</span>
+      <div class="sep"></div>
+      <span>Cancela cuando quieras</span>
+    </div>
+  </div>
+
+  <div class="phone-stage">
+    <div class="note tl">
+      <div class="ic">€</div>
+      <div>IVA Q1 enviado<br><span style="color:var(--muted);font-weight:400">hace 2 minutos</span></div>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="island"></div>
+        <div class="chat-head">
+          <div class="av">M</div>
+          <div>
+            <div class="name">Marta · tu gestora</div>
+            <div class="st">en línea</div>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="bubble me" style="animation-delay:.0s">Factura 2.420 € a Amazon, concepto consultoría abril.<span class="ts">09:41</span></div>
+          <div class="bubble them" style="animation-delay:.15s">Listo. Emitida, enviada y archivada. Verifactu OK<span class="ts">09:41</span></div>
+          <div class="bubble them file" style="animation-delay:.3s">
+            <span class="ic">PDF</span>
+            <span>Factura-2026-047.pdf</span>
+          </div>
+          <div class="bubble me" style="animation-delay:.45s">¿Y el IVA de este trimestre?<span class="ts">09:42</span></div>
+          <div class="bubble them" style="animation-delay:.6s">Lo presento el martes 20. Te sale a <b>devolver 312,40 €</b><span class="ts">09:42</span></div>
+          <div class="bubble typing" style="animation-delay:.85s"><span></span><span></span><span></span></div>
+        </div>
+        <div class="chat-input">
+          <div class="box">Escribe un mensaje</div>
+          <div class="send">➤</div>
+        </div>
+      </div>
+    </div>
+    <div class="note br">
+      <div class="ic">✓</div>
+      <div>Factura emitida<br><span style="color:var(--muted);font-weight:400">Verifactu firmado</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- LOGOS / TRUST -->
+<div class="logos">
+  <div class="logos-row">
+    <div class="label">Integrado con <b>AEAT</b>, tu banco y tus facturas anteriores</div>
+    <div class="logos-marks">
+      <i>AEAT</i>
+      <i>Verifactu</i>
+      <i>Stripe</i>
+      <i>BBVA</i>
+      <i>Holded</i>
+      <i class="italic">Kit Digital</i>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="s" id="how">
+  <div class="s-head">
+    <div>
+      <div class="kicker">Cómo funciona</div>
+      <h2>Cuatro pasos. <span class="hl">Uno</span> por tu parte.</h2>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num">01</div>
+      <div>
+        <h3>Hola.</h3>
+        <p>Nos escribes por WhatsApp. Te preguntamos lo justo — sin formularios de 40 campos.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">02</div>
+      <div>
+        <h3>Migramos.</h3>
+        <p>Conectamos AEAT, tu banco y tus facturas anteriores. No exportas nada tú.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">03</div>
+      <div>
+        <h3>Facturamos.</h3>
+        <p>Cada factura se emite, envía y archiva desde el chat. Verifactu automático.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num">04</div>
+      <div>
+        <h3>Presentamos.</h3>
+        <p>IVA, IRPF, modelos 390 y 347. Los vemos llegar y los enviamos con tu visto bueno.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENTO BENEFITS -->
+<section class="s tight" id="ventajas">
+  <div class="s-head">
+    <div>
+      <div class="kicker">Ventajas</div>
+      <h2>Menos papeles, menos plazos, <span class="hl">más tu tiempo.</span></h2>
+    </div>
+  </div>
+
+  <div class="bento">
+    <!-- big tile with invoice -->
+    <div class="tile big">
+      <div>
+        <h3>Factura por mensaje.</h3>
+        <p>«Factura 2.420 € a Amazon». Entendido. Emitida. Archivada. Sin abrir un formulario.</p>
+      </div>
+      <div class="invoice">
+        <div class="head">
+          <div>
+            <div class="lbl">Factura</div>
+            <div class="num">2026-047</div>
+          </div>
+          <div class="pill">Verifactu OK</div>
+        </div>
+        <div class="row"><span>Cliente</span><b>Amazon Services Spain</b></div>
+        <div class="row"><span>Concepto</span><span>Consultoría · Abr 2026</span></div>
+        <div class="row"><span>IVA (21%)</span><span>508,20 €</span></div>
+        <div class="total"><span>Total</span><b>2.928,20 €</b></div>
+      </div>
+    </div>
+
+    <!-- gestor tile -->
+    <div class="tile">
+      <div>
+        <h3>Tu gestora. La misma. Siempre.</h3>
+        <p>Una persona que conoce tu negocio. No un equipo rotatorio, no un ticket.</p>
+      </div>
+      <div class="gestor-card">
+        <div class="ph">M</div>
+        <div class="info">
+          <b>Marta García</b>
+          <span>Gestora · 6 años contigo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- compliance tile -->
+    <div class="tile">
+      <div>
+        <h3>Cumplimiento, automático.</h3>
+        <p>Verifactu, factura-e, AEAT. Firmado y archivado por defecto.</p>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:24px">
+        <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--chip);color:var(--ink-soft)">Verifactu</span>
+        <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--chip);color:var(--ink-soft)">Factura-e</span>
+        <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--chip);color:var(--ink-soft)">AEAT</span>
+        <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--chip);color:var(--ink-soft)">SEPA</span>
+        <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--chip);color:var(--ink-soft)">Modelo 390</span>
+        <span style="font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--chip);color:var(--ink-soft)">Modelo 347</span>
+      </div>
+    </div>
+
+    <!-- reminders tile -->
+    <div class="tile" style="grid-column: span 2">
+      <div>
+        <h3>Recordatorios <em style="font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;letter-spacing:-0.01em">antes</em>, no después.</h3>
+        <p>Nadie debería enterarse de un plazo por una multa. Te avisamos con tiempo de sobra.</p>
+      </div>
+      <div class="timeline">
+        <div class="timeline-row up"><span class="dot"></span><span class="date">20 may</span><span class="label">Modelo 303 — IVA Q1</span><span class="tag up">próximo</span></div>
+        <div class="timeline-row"><span class="dot"></span><span class="date">15 may</span><span class="label">Verifactu — alta automática</span><span class="tag done">hecho</span></div>
+        <div class="timeline-row"><span class="dot"></span><span class="date">02 may</span><span class="label">IRPF abril</span><span class="tag done">hecho</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section style="max-width:var(--maxw);margin:0 auto;padding:0 32px">
+  <div class="numbers">
+    <div class="num-cell">
+      <div class="v">1.240</div>
+      <div class="l">autónomos confían en Candosa</div>
+    </div>
+    <div class="num-cell">
+      <div class="v">&lt;2<sup>h</sup></div>
+      <div class="l">respuesta humana, L–S</div>
+    </div>
+    <div class="num-cell">
+      <div class="v">19€<sup>/mes</sup></div>
+      <div class="l">desde, sin permanencia</div>
+    </div>
+    <div class="num-cell">
+      <div class="v">0</div>
+      <div class="l">apps que instalar — solo WhatsApp</div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="s" id="vs">
+  <div class="s-head">
+    <div>
+      <div class="kicker">La diferencia</div>
+      <h2>Candosa <span class="hl">vs.</span> el resto.</h2>
+    </div>
+  </div>
+
+  <div class="comp">
+    <!-- header row -->
+    <div class="ch first"></div>
+    <div class="ch title">
+      <div class="name">Pedrito Papeles</div>
+      <div class="sub">El gestor de toda la vida</div>
+    </div>
+    <div class="ch title">
+      <div class="name">El Algoritmo</div>
+      <div class="sub">Fintech de 12 pantallas</div>
+    </div>
+    <div class="ch title you">
+      <div class="name">Candosa</div>
+      <div class="sub">Gestoría por WhatsApp</div>
+    </div>
+
+    <div class="ch first">Canal</div>
+    <div class="ch">Email, llamada</div>
+    <div class="ch">App + 12 pantallas</div>
+    <div class="ch you">WhatsApp</div>
+
+    <div class="ch first">Respuesta</div>
+    <div class="ch">2 – 5 días</div>
+    <div class="ch">Bot genérico</div>
+    <div class="ch you">&lt; 2 h</div>
+
+    <div class="ch first">Precio / mes</div>
+    <div class="ch">60 – 120 €</div>
+    <div class="ch">9 € + extras</div>
+    <div class="ch you">19 – 49 €</div>
+
+    <div class="ch first">Humano real</div>
+    <div class="ch"><span class="yes">✓</span></div>
+    <div class="ch"><span class="no">✗</span></div>
+    <div class="ch you"><span class="yes">✓</span></div>
+
+    <div class="ch first">Presenta por ti</div>
+    <div class="ch"><span class="yes">✓</span></div>
+    <div class="ch"><span class="no">✗</span></div>
+    <div class="ch you"><span class="yes">✓</span></div>
+
+    <div class="ch first row-last">Habla tu idioma</div>
+    <div class="ch row-last">Jerga fiscal</div>
+    <div class="ch row-last">Jerga de producto</div>
+    <div class="ch you row-last">El tuyo</div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band" id="precios">
+  <div>
+    <h2>Empieza esta tarde.<br>Cierra los papeles <span class="hl" style="color:var(--accent);background:none">esta noche</span>.</h2>
+    <p>Sin migración manual. Sin tarjeta. Sin permanencia. Una conversación.</p>
+    <a href="#" class="btn btn-accent">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.96 9.96 0 0 0-8.5 15.18L2 22l4.96-1.51a9.96 9.96 0 1 0 5.08-18.5Zm5.66 14.06c-.24.67-1.41 1.28-1.96 1.35-.51.07-1.13.1-1.83-.11-.42-.13-.96-.32-1.66-.61-2.92-1.26-4.83-4.14-4.98-4.34-.15-.2-1.19-1.59-1.19-3.03 0-1.44.76-2.15 1.03-2.45.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.66.5.24.58.81 2 .88 2.14.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.37-.43.5-.14.14-.3.29-.13.57.17.29.76 1.25 1.63 2.02 1.12 1 2.07 1.31 2.36 1.46.29.14.46.12.63-.07.17-.2.72-.84.92-1.13.19-.29.39-.24.66-.14.27.1 1.7.8 1.99.95.29.14.49.21.56.34.07.13.07.74-.17 1.41Z"/></svg>
+      Empieza por WhatsApp
+    </a>
+  </div>
+  <div class="price-card">
+    <div class="lbl">Plan Autónomo</div>
+    <div class="px">19€<small>/mes</small></div>
+    <div class="feats">
+      <div>Facturación ilimitada</div>
+      <div>IVA + IRPF presentados</div>
+      <div>Tu gestora dedicada</div>
+      <div>Verifactu y factura-e</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand-cell">
+      <h3>Candosa.</h3>
+      <p>La gestoría que cabe en tu móvil. Hecha en Madrid para autónomos y micro-pymes.</p>
+      <a href="#" class="btn">Empieza ahora →</a>
+    </div>
+    <div class="foot-col">
+      <h4>Producto</h4>
+      <ul>
+        <li><a href="#">Cómo funciona</a></li>
+        <li><a href="#">Ventajas</a></li>
+        <li><a href="#">Comparativa</a></li>
+        <li><a href="#">Precios</a></li>
+        <li><a href="#">Para asesorías</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Recursos</h4>
+      <ul>
+        <li><a href="#">Calendario fiscal</a></li>
+        <li><a href="#">Guía Verifactu</a></li>
+        <li><a href="#">Kit Digital</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="mailto:hola@candosa.es">hola@candosa.es</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Madrid, España</a></li>
+        <li><a href="#">Aviso legal</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Candosa · Hecho en Madrid</span>
+    <span>candosa.es</span>
+  </div>
+</footer>
+
+<div id="tweaks-root"></div>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" data-presets="env,react">
+const { useState, useEffect } = React;
+
+const DEFAULTS = /*EDITMODE-BEGIN*/{
+  "displayFont": "Albert Sans",
+  "bodyFont": "Albert Sans",
+  "accentStyle": "underline",
+  "accentColor": "#F03906",
+  "surface": "warm"
+}/*EDITMODE-END*/;
+
+const FONT_STACKS = {
+  "Albert Sans":         '"Albert Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
+  "Funnel Sans":         '"Funnel Sans", "Helvetica Neue", Helvetica, Arial, sans-serif',
+  "Funnel Display":      '"Funnel Display", "Helvetica Neue", Helvetica, Arial, sans-serif',
+  "Hanken Grotesk":      '"Hanken Grotesk", -apple-system, sans-serif',
+  "Bricolage Grotesque": '"Bricolage Grotesque", "Hanken Grotesk", sans-serif',
+  "Geist":               '"Geist", -apple-system, sans-serif',
+  "Manrope":             '"Manrope", -apple-system, sans-serif',
+  "Instrument Sans":     '"Instrument Sans", -apple-system, sans-serif',
+};
+
+const SURFACES = {
+  warm:  { surface: "#F4EFE9", surfaceSoft: "#ECE6DE" },
+  neutral:{ surface: "#F2F2EF", surfaceSoft: "#E8E8E4" },
+  cool:  { surface: "#F1F3F5", surfaceSoft: "#E6EAEE" },
+  white: { surface: "#FAFAF8", surfaceSoft: "#F0EFEC" },
+};
+
+function App() {
+  const [tweaks, setTweak] = window.useTweaks(DEFAULTS);
+
+  useEffect(() => {
+    const r = document.documentElement.style;
+    r.setProperty("--font-display", FONT_STACKS[tweaks.displayFont] || FONT_STACKS["Albert Sans"]);
+    r.setProperty("--font-body", FONT_STACKS[tweaks.bodyFont] || FONT_STACKS["Albert Sans"]);
+    r.setProperty("--accent", tweaks.accentColor);
+    const s = SURFACES[tweaks.surface] || SURFACES.warm;
+    r.setProperty("--surface", s.surface);
+    r.setProperty("--surface-soft", s.surfaceSoft);
+    document.body.setAttribute("data-accent", tweaks.accentStyle);
+  }, [tweaks]);
+
+  const TP = window.TweaksPanel;
+  const Section = window.TweakSection;
+  const Select = window.TweakSelect;
+  const Color = window.TweakColor;
+  const Radio = window.TweakRadio;
+
+  return (
+    <TP title="Tweaks">
+      <Section title="Typography">
+        <Select
+          label="Display font"
+          value={tweaks.displayFont}
+          options={Object.keys(FONT_STACKS)}
+          onChange={(v) => setTweak("displayFont", v)}
+        />
+        <Select
+          label="Body font"
+          value={tweaks.bodyFont}
+          options={Object.keys(FONT_STACKS)}
+          onChange={(v) => setTweak("bodyFont", v)}
+        />
+      </Section>
+
+      <Section title="Accent">
+        <Select
+          label="Emphasis style"
+          value={tweaks.accentStyle}
+          options={["underline","solid","italic","bold"]}
+          onChange={(v) => setTweak("accentStyle", v)}
+        />
+        <Color
+          label="Accent color"
+          value={tweaks.accentColor}
+          options={["#F03906","#E04F16","#0F766E","#1E40AF","#111827"]}
+          onChange={(v) => setTweak("accentColor", v)}
+        />
+      </Section>
+
+      <Section title="Surface">
+        <Radio
+          label="Tone"
+          value={tweaks.surface}
+          options={["warm","neutral","cool","white"]}
+          onChange={(v) => setTweak("surface", v)}
+        />
+      </Section>
+    </TP>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("tweaks-root"));
+root.render(<App />);
+</script>
+</body>
+</html>

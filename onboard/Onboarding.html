@@ -1,0 +1,963 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Candosa — Onboarding</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #11212d;
+  --ink-soft: #2c3a47;
+  --muted: #6B7480;
+  --muted-soft: #9098A2;
+  --line: rgba(17,33,45,0.10);
+  --line-soft: rgba(17,33,45,0.06);
+  --line-hair: rgba(17,33,45,0.04);
+  --purple: #F03906;
+  --purple-2: #FF8C66;
+  --purple-tint: #FFEDE5;
+  --peach: #FFB199;
+  --cream: #FDFCFA;
+  --cream-2: #F6F2EC;
+  --card: #ffffff;
+  --success: #079453;
+  --maxw: 980px;
+  --r-md: 14px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+  --r-pill: 999px;
+  --font: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: var(--font);
+  background: var(--cream);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  width: 1000px; height: 1000px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 30%, color-mix(in oklab, var(--purple) 65%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 70% 35%, #FFD1F2 0%, transparent 55%),
+    radial-gradient(circle at 55% 70%, #FFB199 0%, transparent 60%);
+  top: -340px; right: -260px;
+  filter: blur(70px);
+  opacity: 0.50;
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: "";
+  position: fixed;
+  width: 820px; height: 820px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 40% 40%, color-mix(in oklab, var(--peach) 85%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 70% 60%, #FFD1F2 0%, transparent 55%),
+    radial-gradient(circle at 30% 75%, #B4A0FF 0%, transparent 60%);
+  bottom: -360px; left: -220px;
+  filter: blur(90px);
+  opacity: 0.52;
+  pointer-events: none;
+  z-index: 0;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; }
+::selection { background: var(--purple); color: #fff; }
+
+/* ───────── App chrome ───────── */
+.app {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex; flex-direction: column;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 30;
+  background: rgba(14,28,40,0.92);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+}
+.topbar-row {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 28px;
+  display: flex; align-items: center; gap: 16px;
+  position: relative;
+}
+.back {
+  display: inline-grid; place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.32);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background .15s, transform .12s, border-color .15s;
+}
+.back:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.50); }
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.brand .mark {
+  width: 30px; height: 30px;
+  display: block;
+  flex-shrink: 0;
+}
+.brand .mark svg { width: 100%; height: 100%; display: block; }
+.save {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.62);
+  letter-spacing: -0.005em;
+}
+.save .tick {
+  display: inline-grid; place-items: center;
+  width: 18px; height: 18px;
+  border-radius: 999px;
+  background: rgba(7,148,83,0.22);
+  color: #5BD499;
+  font-size: 11px;
+}
+.save b { color: #fff; font-weight: 600; }
+.chat-pill {
+  display: inline-grid; place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.32);
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.chat-pill:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.50); }
+.chat-pill svg { width: 16px; height: 16px; }
+.save-exit {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px 10px 18px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.32);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: -0.005em;
+  transition: background .15s, border-color .15s;
+}
+.save-exit:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.50); }
+.save-exit svg { width: 14px; height: 14px; }
+.divider {
+  width: 1px; height: 24px;
+  background: rgba(255,255,255,0.14);
+  margin: 0 4px;
+}
+
+/* progress */
+.progress {
+  height: 8px;
+  background: #fff;
+  position: sticky;
+  top: 76px;
+  z-index: 25;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line-hair);
+}
+.progress .bar {
+  height: 100%;
+  width: 18%;
+  background: var(--purple);
+  border-radius: 0 999px 999px 0;
+  transition: width .6s cubic-bezier(.6,0,.2,1);
+  box-shadow: 0 0 16px color-mix(in oklab, var(--purple) 90%, transparent), 0 0 4px color-mix(in oklab, var(--purple) 90%, transparent);
+}
+.progress-steps {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 28px 16px;
+  display: flex; align-items: center; gap: 16px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.02em;
+}
+.progress-steps .pip {
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.progress-steps .pip .n {
+  display: grid; place-items: center;
+  width: 22px; height: 22px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0;
+}
+.progress-steps .pip.done .n { background: var(--success); color: #fff; }
+.progress-steps .pip.cur .n { background: var(--purple); color: #fff; box-shadow: 0 0 0 4px color-mix(in oklab, var(--purple) 30%, transparent); }
+.progress-steps .pip.cur span { color: #fff; font-weight: 600; }
+.progress-steps .sep { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+
+/* ───────── Main canvas ───────── */
+main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 56px 28px 120px;
+  position: relative;
+}
+.canvas {
+  width: 100%;
+  max-width: var(--maxw);
+}
+
+.h-row {
+  margin-bottom: 28px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 32px;
+}
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.eyebrow .square {
+  width: 8px; height: 8px;
+  background: var(--purple);
+  border-radius: 2px;
+}
+h1.title {
+  font-size: clamp(36px, 4.4vw, 56px);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  margin: 0 0 12px;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 16ch;
+}
+p.sub {
+  font-size: 16.5px;
+  color: var(--ink-soft);
+  letter-spacing: -0.005em;
+  margin: 0;
+  max-width: 52ch;
+  line-height: 1.5;
+}
+
+.legend {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  text-align: right;
+  flex-shrink: 0;
+  padding-bottom: 6px;
+}
+.legend kbd {
+  display: inline-grid; place-items: center;
+  min-width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0 6px;
+  margin: 0 2px;
+}
+
+/* options */
+.step { display: none; }
+.step.active { display: block; animation: stepIn .35s ease-out; }
+@keyframes stepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.options {
+  display: grid;
+  gap: 12px;
+}
+.opt {
+  position: relative;
+  background: #fff;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--r-xl);
+  padding: 22px 28px;
+  display: grid;
+  grid-template-columns: 28px 56px 1fr auto;
+  align-items: center;
+  gap: 22px;
+  cursor: pointer;
+  transition: border-color .18s, transform .18s, box-shadow .18s, background .18s;
+  box-shadow: 0 1px 0 rgba(17,33,45,0.03);
+}
+.opt:hover {
+  border-color: rgba(17,33,45,0.14);
+  transform: translateY(-1px);
+  box-shadow: 0 1px 0 rgba(17,33,45,0.04), 0 16px 32px -16px rgba(17,33,45,0.14);
+}
+.opt input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px; height: 24px;
+  border-radius: 999px;
+  border: 2px solid rgba(17,33,45,0.18);
+  background: #fff;
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+  transition: border-color .15s, background .15s, box-shadow .15s;
+}
+.opt input[type="radio"]:hover { border-color: rgba(17,33,45,0.30); }
+.opt input[type="radio"]:checked {
+  border-color: var(--purple);
+  background: var(--purple);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--purple) 20%, transparent);
+}
+.opt input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border-radius: 999px;
+  transform: scale(0.35);
+}
+.opt .icn {
+  width: 56px; height: 56px;
+  border-radius: var(--r-lg);
+  background: rgba(17,33,45,0.04);
+  display: grid; place-items: center;
+  color: var(--ink);
+  transition: background .15s, color .15s;
+  flex-shrink: 0;
+}
+.opt .icn svg { width: 26px; height: 26px; }
+.opt .txt h3 {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 0 0 4px;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.opt .txt p {
+  font-size: 14.5px;
+  color: var(--muted);
+  margin: 0;
+  letter-spacing: -0.005em;
+  line-height: 1.4;
+}
+.opt .meta {
+  display: flex; flex-direction: column;
+  align-items: flex-end; gap: 6px;
+  font-size: 11.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.opt .meta .time {
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.opt .meta .time::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: var(--peach);
+}
+.opt .kbd {
+  display: inline-grid; place-items: center;
+  min-width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 0 6px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.opt:has(input:checked) {
+  border-color: var(--purple);
+  background: linear-gradient(180deg, #fff, var(--cream-2));
+  box-shadow: 0 1px 0 rgba(240,57,6,0.10), 0 20px 36px -16px rgba(240,57,6,0.22);
+}
+.opt:has(input:checked) .icn {
+  background: var(--purple);
+  color: #fff;
+}
+.opt:has(input:checked) .meta { color: var(--purple); }
+.opt:has(input:checked) .meta .time::before { background: var(--purple); }
+.opt:has(input:checked) .kbd {
+  background: var(--purple);
+  color: #fff;
+  border-color: var(--purple);
+}
+
+/* ───────── Phone step ───────── */
+.phone-card {
+  background: #fff;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-xl);
+  padding: 36px 36px 32px;
+  box-shadow: 0 1px 0 rgba(17,33,45,0.04), 0 28px 48px -20px rgba(17,33,45,0.10);
+  max-width: 760px;
+  margin: 0 auto;
+}
+.phone-card .label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+  display: flex; align-items: center; gap: 10px;
+}
+.phone-card .label .flag {
+  display: inline-grid; place-items: center;
+  width: 22px; height: 16px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #AA151B 33%, #F1BF00 33% 66%, #AA151B 66%);
+  font-size: 0;
+}
+.phone-fields {
+  display: grid;
+  grid-template-columns: 90px 1fr 1fr 1fr;
+  gap: 12px;
+  align-items: stretch;
+}
+.phone-fields .field {
+  position: relative;
+  background: rgba(17,33,45,0.04);
+  border: 2px solid transparent;
+  border-radius: var(--r-md);
+  transition: background .15s, border-color .15s, transform .12s;
+}
+.phone-fields .field:focus-within {
+  background: #fff;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--purple) 18%, transparent);
+}
+.phone-fields .field.filled {
+  background: linear-gradient(180deg, #fff, var(--cream-2));
+  border-color: rgba(240,57,6,0.20);
+}
+.phone-fields input {
+  width: 100%;
+  height: 72px;
+  background: transparent;
+  border: none;
+  outline: none;
+  text-align: center;
+  font-family: var(--font);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  padding: 0 12px;
+}
+.phone-fields input::placeholder {
+  color: rgba(17,33,45,0.22);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.phone-fields .field.cc input { font-weight: 800; }
+.phone-fields .field.cc::before {
+  content: "";
+  position: absolute; left: 12px; top: 50%;
+  transform: translateY(-50%);
+  width: 22px; height: 16px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #AA151B 33%, #F1BF00 33% 66%, #AA151B 66%);
+  pointer-events: none;
+}
+.phone-meta {
+  margin-top: 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.phone-meta .preview {
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  letter-spacing: -0.005em;
+}
+.phone-meta .preview b {
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+.phone-meta .wa-note {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(7,148,83,0.10);
+  color: var(--success);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 7px 12px 7px 10px;
+  border-radius: 999px;
+  letter-spacing: -0.005em;
+}
+.phone-meta .wa-note::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: #25D366;
+  box-shadow: 0 0 0 3px rgba(37,211,102,0.18);
+}
+.phone-meta .wa-note svg { width: 14px; height: 14px; }
+
+@media (max-width: 600px) {
+  .phone-card { padding: 24px; }
+  .phone-fields { grid-template-columns: 80px 1fr 1fr 1fr; gap: 8px; }
+  .phone-fields input { height: 60px; font-size: 22px; }
+}
+
+/* help row */
+.help {
+  margin-top: 36px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+}
+.help .wa {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 600;
+  transition: background .15s, border-color .15s;
+  cursor: pointer;
+}
+.help .wa:hover { background: var(--cream-2); border-color: rgba(240,57,6,0.20); }
+.help .wa::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: #25D366;
+  box-shadow: 0 0 0 3px rgba(37,211,102,0.20);
+}
+
+/* footer cta bar */
+.footer-cta {
+  position: sticky; bottom: 0;
+  z-index: 20;
+  background: linear-gradient(180deg, rgba(253,252,250,0) 0%, rgba(253,252,250,0.85) 30%, rgba(253,252,250,1) 100%);
+  padding: 36px 28px 28px;
+  margin-top: auto;
+}
+.footer-row {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap;
+}
+.cookie-btn {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.cookie-btn:hover { background: rgba(17,33,45,0.04); }
+.continue-wrap {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 16px;
+}
+.continue-hint {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: -0.005em;
+}
+.continue-hint kbd {
+  display: inline-grid; place-items: center;
+  min-width: 22px; height: 22px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 0 6px;
+  margin: 0 2px;
+}
+.continue {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 26px;
+  border-radius: 999px;
+  background: var(--purple);
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.005em;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 12px 28px -8px color-mix(in oklab, var(--purple) 50%, transparent);
+  transition: background .15s, transform .12s, box-shadow .15s;
+}
+.continue:hover { background: #D32A04; transform: translateY(-1px); }
+.continue:disabled,
+.continue.disabled {
+  background: rgba(17,33,45,0.10);
+  color: var(--muted);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+.continue:disabled .arr,
+.continue.disabled .arr {
+  background: rgba(17,33,45,0.10);
+  color: var(--muted);
+}
+.continue .arr {
+  display: inline-grid; place-items: center;
+  width: 22px; height: 22px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.22);
+  font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 760px) {
+  .topbar-row { padding: 14px 18px; }
+  .brand { position: static; transform: none; }
+  .save { display: none; }
+  .progress-steps { padding: 12px 18px 0; }
+  .progress-steps .pip span { display: none; }
+  main { padding: 36px 18px 100px; }
+  .h-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .legend { text-align: left; }
+  .opt {
+    grid-template-columns: 24px 48px 1fr;
+    padding: 18px 18px;
+    gap: 14px;
+  }
+  .opt .meta { display: none; }
+  .footer-cta { padding: 24px 18px 18px; }
+  .continue-hint { display: none; }
+  .continue { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body data-screen-label="Onboarding · ¿Cuál es tu situación?">
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="topbar-row">
+      <a href="/" class="brand">
+        <span class="mark" aria-hidden="true">
+          <svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#F03906" d="M14 0C18.064 0.0358519 22.1284 0.886309 24.5869 3.41406C27.1143 5.87253 27.9642 9.93635 28 14C27.9642 18.0638 27.1144 22.1275 24.5869 24.5859C22.1284 27.1138 18.064 27.9642 14 28C9.93614 27.9642 5.87248 27.1137 3.41406 24.5859C0.886284 22.1275 0.0358524 18.064 0 14C0.0358522 9.93616 0.886293 5.8725 3.41406 3.41406C5.87248 0.886341 9.93601 0.0358718 14 0Z"/>
+            <path fill="#ffffff" d="M13.8965 8.03027C13.7626 8.03027 13.6472 8.07205 13.5498 8.15625C13.4565 8.24049 13.3974 8.3528 13.373 8.49316C13.2635 9.29596 13.1435 9.97254 13.0137 10.5225C12.8838 11.0723 12.7112 11.5237 12.4961 11.877C12.2811 12.226 11.9974 12.5052 11.6445 12.7139C11.2956 12.9225 10.8511 13.0876 10.3115 13.208C9.77179 13.3244 9.10579 13.4245 8.31445 13.5088C8.17254 13.5288 8.05521 13.5874 7.96191 13.6836C7.86858 13.7799 7.82129 13.8967 7.82129 14.0332C7.82137 14.1694 7.86604 14.2856 7.95508 14.3818C8.04841 14.4782 8.16838 14.5347 8.31445 14.5508C8.97174 14.6391 9.53975 14.7337 10.0186 14.834C10.5015 14.9303 10.914 15.0508 11.2549 15.1953C11.5955 15.3398 11.8793 15.5262 12.1064 15.7549C12.3336 15.9796 12.5227 16.2624 12.6729 16.6035C12.827 16.9406 12.957 17.3523 13.0625 17.8379C13.1721 18.3236 13.2757 18.9001 13.373 19.5664C13.3974 19.7068 13.4565 19.8191 13.5498 19.9033C13.6472 19.9915 13.7626 20.0361 13.8965 20.0361C14.0304 20.0361 14.144 19.9916 14.2373 19.9033C14.3347 19.8191 14.3937 19.7068 14.4141 19.5664C14.5236 18.7636 14.6436 18.0889 14.7734 17.543C14.9073 16.9932 15.0791 16.5435 15.29 16.1943C15.5051 15.8411 15.7877 15.5603 16.1367 15.3516C16.4898 15.1429 16.9359 14.9797 17.4756 14.8633C18.0194 14.7429 18.6854 14.6391 19.4727 14.5508C19.6146 14.5347 19.7319 14.4781 19.8252 14.3818C19.9225 14.2856 19.9716 14.1695 19.9717 14.0332C19.9717 13.8967 19.9226 13.7799 19.8252 13.6836C19.7319 13.5873 19.6164 13.5289 19.4785 13.5088C18.6872 13.4205 18.0212 13.3186 17.4814 13.2021C16.9419 13.0817 16.4974 12.9167 16.1484 12.708C15.7996 12.4993 15.5178 12.2202 15.3027 11.8711C15.0877 11.5179 14.9132 11.0683 14.7793 10.5225C14.6494 9.97254 14.5277 9.29596 14.4141 8.49316C14.3897 8.35283 14.3287 8.24049 14.2314 8.15625C14.1381 8.07196 14.0263 8.03027 13.8965 8.03027Z"/>
+          </svg>
+        </span>
+        Candosa
+      </a>
+      <div class="save">
+        <span class="tick">✓</span>
+        Guardado <b>Ahora mismo</b>
+      </div>
+      <button class="chat-pill" aria-label="Chat de ayuda">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </button>
+      <button class="save-exit">
+        Guardar y salir
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="progress"><div class="bar" id="progBar"></div></div>
+
+  <main>
+    <div class="canvas">
+
+      <!-- STEP 1: Situación -->
+      <section class="step active" data-step="1">
+      <div class="h-row">
+        <div>
+          <div class="eyebrow"><span class="square"></span> Paso 1 de 5</div>
+          <h1 class="title">¿Cuál es tu situación ahora mismo?</h1>
+          <p class="sub">Elige la opción que mejor te represente — la usamos para preparar tu expediente y enseñarte solo lo que aplica a tu caso.</p>
+        </div>
+      </div>
+
+      <div class="options" role="radiogroup" aria-label="Tipo de situación">
+
+        <label class="opt">
+          <input type="radio" name="situacion" value="alta-autonomo">
+          <span class="icn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M17 11l2 2 4-4"/>
+            </svg>
+          </span>
+          <div class="txt">
+            <h3>Alta de Autónomo</h3>
+            <p>Quiero darme de alta como autónomo</p>
+          </div>
+          <div class="meta"><span class="kbd">1</span>
+          </div>
+        </label>
+
+        <label class="opt">
+          <input type="radio" name="situacion" value="alta-sl">
+          <span class="icn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="3" width="16" height="18" rx="2"/>
+              <path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/>
+            </svg>
+          </span>
+          <div class="txt">
+            <h3>Alta de SL</h3>
+            <p>Quiero constituir una sociedad</p>
+          </div>
+          <div class="meta"><span class="kbd">2</span>
+          </div>
+        </label>
+
+        <label class="opt">
+          <input type="radio" name="situacion" value="autonomo-existente">
+          <span class="icn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              <path d="M2 13h20"/>
+            </svg>
+          </span>
+          <div class="txt">
+            <h3>Autónomo existente</h3>
+            <p>Ya soy autónomo y quiero cambiar de gestor</p>
+          </div>
+          <div class="meta"><span class="kbd">3</span>
+          </div>
+        </label>
+
+        <label class="opt">
+          <input type="radio" name="situacion" value="sl-existente">
+          <span class="icn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2"/>
+              <path d="M9 6h2M13 6h2M9 10h2M13 10h2M9 14h2M13 14h2M10 22v-4h4v4"/>
+            </svg>
+          </span>
+          <div class="txt">
+            <h3>SL existente</h3>
+            <p>Ya tengo una SL y quiero cambiar de gestor</p>
+          </div>
+          <div class="meta"><span class="kbd">4</span>
+          </div>
+        </label>
+
+      </div>
+
+      <div class="help">
+        ¿Necesitas ayuda?
+        <div><a href="#" class="wa">Chatea por WhatsApp</a></div>
+      </div>
+      </section>
+
+      <!-- STEP 2: Teléfono -->
+      <section class="step" data-step="2">
+        <div class="h-row">
+          <div>
+            <div class="eyebrow"><span class="square"></span> Paso 2 de 5</div>
+            <h1 class="title">¿Cuál es tu teléfono?</h1>
+            <p class="sub">Lo usamos para contactarte por WhatsApp si necesitamos algo — nunca para llamarte sin avisar.</p>
+          </div>
+          <div class="legend">
+            Salta entre campos con <kbd>Tab</kbd>
+          </div>
+        </div>
+
+        <div class="phone-card">
+          <div class="label">
+            <span class="flag"></span>
+            Teléfono móvil · España
+          </div>
+          <div class="phone-fields">
+            <div class="field cc filled">
+              <input type="text" value="+34" inputmode="numeric" aria-label="Prefijo" style="padding-left:38px">
+            </div>
+            <div class="field">
+              <input type="text" maxlength="3" inputmode="numeric" placeholder="345" aria-label="Teléfono parte 1" data-phone-part="1">
+            </div>
+            <div class="field">
+              <input type="text" maxlength="3" inputmode="numeric" placeholder="234" aria-label="Teléfono parte 2" data-phone-part="2">
+            </div>
+            <div class="field">
+              <input type="text" maxlength="3" inputmode="numeric" placeholder="523" aria-label="Teléfono parte 3" data-phone-part="3">
+            </div>
+          </div>
+          <div class="phone-meta">
+            <div class="preview">Te contactaremos en <b id="phonePreview">+34 ••• ••• •••</b></div>
+            <div class="wa-note">Lo recibirás por WhatsApp</div>
+          </div>
+        </div>
+
+        <div class="help">
+          ¿Necesitas ayuda?
+          <div><a href="#" class="wa">Chatea por WhatsApp</a></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <div class="footer-cta">
+    <div class="footer-row">
+      <button class="cookie-btn">Configuración de cookies</button>
+      <div class="continue-wrap">
+        <span class="continue-hint">Pulsa <kbd>Enter</kbd> para continuar</span>
+        <button class="continue disabled" id="continueBtn" disabled>
+          Continuar
+          <span class="arr">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const STEPS = Array.from(document.querySelectorAll('.step'));
+  const pips = [];
+  const bar = document.getElementById('progBar');
+  const btn = document.getElementById('continueBtn');
+  const radios = Array.from(document.querySelectorAll('input[name="situacion"]'));
+  const phoneInputs = Array.from(document.querySelectorAll('[data-phone-part]'));
+  const phonePreview = document.getElementById('phonePreview');
+  const TOTAL = 5;
+  let current = 1;
+
+  function goTo(n) {
+    current = Math.max(1, Math.min(TOTAL, n));
+    STEPS.forEach(s => s.classList.toggle('active', +s.dataset.step === current));
+    pips.forEach((p, i) => {
+      p.classList.remove('cur', 'done');
+      if (i + 1 < current) p.classList.add('done');
+      else if (i + 1 === current) p.classList.add('cur');
+    });
+    bar.style.width = Math.max(8, (current / TOTAL) * 100) + '%';
+    update();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function isStepValid() {
+    if (current === 1) return radios.some(r => r.checked);
+    if (current === 2) return phoneInputs.every(i => i.value.replace(/\D/g, '').length >= 3);
+    return true;
+  }
+  function update() {
+    if (isStepValid()) { btn.disabled = false; btn.classList.remove('disabled'); }
+    else { btn.disabled = true; btn.classList.add('disabled'); }
+  }
+
+  radios.forEach(r => r.addEventListener('change', update));
+
+  // Phone input behavior
+  phoneInputs.forEach((inp, idx) => {
+    inp.addEventListener('input', e => {
+      inp.value = inp.value.replace(/\D/g, '').slice(0, 3);
+      inp.closest('.field').classList.toggle('filled', inp.value.length === 3);
+      if (inp.value.length === 3 && idx < phoneInputs.length - 1) {
+        phoneInputs[idx + 1].focus();
+      }
+      const parts = phoneInputs.map(p => p.value.padEnd(3, '•'));
+      phonePreview.textContent = '+34 ' + parts.join(' ');
+      update();
+    });
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && inp.value === '' && idx > 0) {
+        phoneInputs[idx - 1].focus();
+      }
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (current === 1) {
+      if (['1','2','3','4'].includes(e.key) && document.activeElement.tagName !== 'INPUT') {
+        const i = parseInt(e.key, 10) - 1;
+        radios[i].checked = true;
+        update();
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        if (document.activeElement.tagName === 'INPUT') return;
+        e.preventDefault();
+        const idx = radios.findIndex(r => r.checked);
+        const next = (idx + 1) % radios.length;
+        radios[next].checked = true; update();
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        if (document.activeElement.tagName === 'INPUT') return;
+        e.preventDefault();
+        const idx = radios.findIndex(r => r.checked);
+        const prev = (idx <= 0 ? radios.length : idx) - 1;
+        radios[prev].checked = true; update();
+      }
+    }
+    if (e.key === 'Enter' && !btn.disabled && document.activeElement !== btn) {
+      btn.click();
+    }
+  });
+
+  btn.addEventListener('click', () => {
+    if (btn.disabled) return;
+    btn.innerHTML = '<span class="arr" style="background:rgba(255,255,255,0.22);width:16px;height:16px;border-radius:999px;border:2px solid rgba(255,255,255,0.6);border-top-color:#fff;animation:spin .8s linear infinite"></span> Cargando…';
+    setTimeout(() => {
+      btn.innerHTML = 'Continuar <span class="arr">→</span>';
+      if (current < TOTAL) goTo(current + 1);
+      else { btn.innerHTML = '✓ Listo'; }
+    }, 500);
+  });
+
+  goTo(1);
+})();
+</script>
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</body>
+</html>
