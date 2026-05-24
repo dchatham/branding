@@ -6,7 +6,23 @@
 <title>Candosa — Onboarding</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<script>
+(function() {
+  try {
+    var stored = localStorage.getItem('theme') || 'system';
+    var effective = stored;
+    if (stored === 'system') {
+      var prefers = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      effective = prefers ? 'dark' : 'light';
+    }
+    if (effective === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme-pref', stored);
+    var storedFont = localStorage.getItem('font') || 'serif';
+    document.documentElement.setAttribute('data-font', storedFont);
+  } catch (e) {}
+})();
+</script>
 <style>
 :root {
   --ink: #11212d;
@@ -20,8 +36,8 @@
   --purple-2: #FF8C66;
   --purple-tint: #FFEDE5;
   --peach: #FFB199;
-  --cream: #FDFCFA;
-  --cream-2: #F6F2EC;
+  --cream: #F1ECE4;
+  --cream-2: #E8E2D8;
   --card: #ffffff;
   --success: #079453;
   --maxw: 980px;
@@ -30,6 +46,7 @@
   --r-xl: 24px;
   --r-pill: 999px;
   --font: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; height: 100%; }
@@ -255,14 +272,20 @@ main {
   border-radius: 2px;
 }
 h1.title {
+  font-family: var(--font-display);
   font-size: clamp(36px, 4.4vw, 56px);
-  font-weight: 600;
-  letter-spacing: -0.035em;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   line-height: 1.02;
   margin: 0 0 12px;
   color: var(--ink);
   text-wrap: balance;
   max-width: 16ch;
+}
+html[data-font="sans"] h1.title {
+  font-family: var(--font);
+  font-weight: 600;
+  letter-spacing: -0.035em;
 }
 p.sub {
   font-size: 16.5px;
@@ -576,7 +599,7 @@ p.sub {
 .footer-cta {
   position: sticky; bottom: 0;
   z-index: 20;
-  background: linear-gradient(180deg, rgba(253,252,250,0) 0%, rgba(253,252,250,0.85) 30%, rgba(253,252,250,1) 100%);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--cream) 0%, transparent) 0%, color-mix(in oklab, var(--cream) 85%, transparent) 30%, var(--cream) 100%);
   padding: 36px 28px 28px;
   margin-top: auto;
 }
@@ -678,6 +701,106 @@ p.sub {
   .continue-hint { display: none; }
   .continue { width: 100%; justify-content: center; }
 }
+
+/* Theme toggle button (matches landing nav) */
+.theme-toggle {
+  width: 40px; height: 40px;
+  display: inline-grid; place-items: center;
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.32);
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  padding: 0;
+}
+.theme-toggle:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.50); }
+.theme-toggle svg { width: 16px; height: 16px; display: none; }
+html[data-theme-pref="system"] .theme-toggle .icon-system { display: block; }
+html[data-theme-pref="dark"] .theme-toggle .icon-moon { display: block; }
+html[data-theme-pref="light"] .theme-toggle .icon-sun { display: block; }
+html:not([data-theme-pref]) .theme-toggle .icon-system { display: block; }
+
+/* ───────── Dark theme overrides ───────── */
+html[data-theme="dark"] {
+  --ink: #F5F1EA;
+  --ink-soft: #D6DEE5;
+  --muted: #95A2AE;
+  --muted-soft: #6B7480;
+  --line: rgba(245,241,234,0.14);
+  --line-soft: rgba(245,241,234,0.08);
+  --line-hair: rgba(245,241,234,0.05);
+  --cream: #0E1C28;
+  --cream-2: #142535;
+  --card: #182838;
+}
+html[data-theme="dark"] body { background: var(--cream); color: var(--ink); }
+html[data-theme="dark"] body::before,
+html[data-theme="dark"] body::after { opacity: 0.24; }
+
+html[data-theme="dark"] .opt {
+  background: #182838;
+  border-color: rgba(245,241,234,0.10);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.4);
+}
+html[data-theme="dark"] .opt:hover {
+  border-color: rgba(245,241,234,0.24);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.4), 0 16px 32px -16px rgba(0,0,0,0.6);
+}
+html[data-theme="dark"] .opt input[type="radio"] {
+  background: #0E1C28;
+  border-color: rgba(245,241,234,0.30);
+}
+html[data-theme="dark"] .opt input[type="radio"]:hover { border-color: rgba(245,241,234,0.50); }
+html[data-theme="dark"] .opt .icn {
+  background: rgba(245,241,234,0.08);
+  color: var(--ink);
+}
+html[data-theme="dark"] .opt .txt h3 { color: #fff; }
+html[data-theme="dark"] .opt .txt p { color: var(--muted); }
+html[data-theme="dark"] .opt .kbd {
+  background: #0E1C28;
+  border-color: rgba(245,241,234,0.14);
+  color: var(--muted);
+}
+html[data-theme="dark"] .opt:has(input:checked) {
+  background: linear-gradient(180deg, #1E2F40, #182838);
+  border-color: var(--purple);
+  box-shadow: 0 1px 0 rgba(240,57,6,0.18), 0 20px 36px -16px rgba(240,57,6,0.30);
+}
+html[data-theme="dark"] .opt:has(input:checked) .kbd {
+  background: var(--purple);
+  color: #fff;
+  border-color: var(--purple);
+}
+
+html[data-theme="dark"] h1.title { color: #fff; }
+html[data-theme="dark"] p.sub { color: var(--muted); }
+
+html[data-theme="dark"] .footer-cta {
+  background: linear-gradient(180deg, rgba(14,28,40,0) 0%, rgba(14,28,40,0.85) 30%, rgba(14,28,40,1) 100%);
+}
+html[data-theme="dark"] .cookie-btn { color: var(--muted); border-color: var(--line); }
+html[data-theme="dark"] .cookie-btn:hover { background: rgba(245,241,234,0.06); }
+html[data-theme="dark"] .continue-hint { color: var(--muted); }
+html[data-theme="dark"] .continue-hint kbd {
+  background: #0E1C28;
+  border-color: var(--line);
+  color: var(--ink);
+}
+html[data-theme="dark"] .continue:disabled,
+html[data-theme="dark"] .continue.disabled {
+  background: rgba(245,241,234,0.08);
+  color: var(--muted);
+}
+
+html[data-theme="dark"] .progress { background: rgba(245,241,234,0.08); }
+
+/* Title weight bump */
+h1.title,
+.opt .txt h3,
+.eyebrow,
+.title { font-weight: 900 !important; }
 </style>
 </head>
 <body data-screen-label="Onboarding · ¿Cuál es tu situación?">
@@ -699,6 +822,12 @@ p.sub {
         <span class="tick">✓</span>
         Guardado <b>Ahora mismo</b>
       </div>
+      <button id="fontToggle" class="theme-toggle" type="button" aria-label="Cambiar fuente" title="Fuente: serif" style="font-family:var(--font-display);font-weight:700;font-size:15px;width:auto;padding:0 12px;">Aa</button>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Cambiar tema" title="Tema: sistema">
+        <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
       <button class="chat-pill" aria-label="Chat de ayuda">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
       </button>
@@ -954,6 +1083,56 @@ p.sub {
   });
 
   goTo(1);
+})();
+(function() {
+  var btn = document.getElementById('themeToggle');
+  if (!btn) return;
+  var html = document.documentElement;
+  var mql = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+  var labels = { system: 'Tema: sistema', dark: 'Tema: oscuro', light: 'Tema: claro' };
+  function apply(pref) {
+    html.setAttribute('data-theme-pref', pref);
+    var effective = pref;
+    if (pref === 'system') effective = (mql && mql.matches) ? 'dark' : 'light';
+    if (effective === 'dark') html.setAttribute('data-theme', 'dark');
+    else html.removeAttribute('data-theme');
+    btn.setAttribute('title', labels[pref] || labels.system);
+    btn.setAttribute('aria-label', labels[pref] || labels.system);
+  }
+  function getPref() {
+    try { return localStorage.getItem('theme') || 'system'; } catch (e) { return 'system'; }
+  }
+  function setPref(p) {
+    try { localStorage.setItem('theme', p); } catch (e) {}
+    apply(p);
+  }
+  btn.addEventListener('click', function() {
+    var order = ['system', 'dark', 'light'];
+    var i = order.indexOf(getPref());
+    setPref(order[(i + 1) % order.length]);
+  });
+  if (mql && mql.addEventListener) {
+    mql.addEventListener('change', function() {
+      if (getPref() === 'system') apply('system');
+    });
+  }
+  apply(getPref());
+})();
+(function() {
+  var btn = document.getElementById('fontToggle');
+  if (!btn) return;
+  var html = document.documentElement;
+  function sync(f) {
+    btn.title = f === 'sans' ? 'Fuente: sans' : 'Fuente: serif';
+    btn.style.fontFamily = f === 'sans' ? 'var(--font)' : 'var(--font-display)';
+  }
+  sync(html.getAttribute('data-font') || 'serif');
+  btn.addEventListener('click', function() {
+    var cur = html.getAttribute('data-font') === 'sans' ? 'serif' : 'sans';
+    html.setAttribute('data-font', cur);
+    try { localStorage.setItem('font', cur); } catch (e) {}
+    sync(cur);
+  });
 })();
 </script>
 <style>
