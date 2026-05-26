@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Candosa — Ads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FDFCFA;
+  --bg-2: #F6F2EC;
+  --ink: #11212d;
+  --ink-soft: #2c3a47;
+  --muted: #6B7480;
+  --line: rgba(17,33,45,0.10);
+  --purple: #F03906;
+  --purple-2: #FF8C66;
+  --peach: #FFB199;
+  --pink: #FFD1F2;
+  --lilac: #B4A0FF;
+  --sky: #7CC4FF;
+  --success: #079453;
+  --font: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding: 64px 24px 96px;
+}
+.page-head {
+  max-width: 1120px;
+  margin: 0 auto 48px;
+  padding: 0 8px;
+}
+.page-head .kicker {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(17,33,45,0.05);
+  border: 1px solid rgba(17,33,45,0.10);
+  border-radius: 999px;
+  padding: 6px 14px 6px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 28px;
+}
+.page-head .kicker .sq {
+  width: 8px; height: 8px;
+  background: var(--purple);
+  border-radius: 999px;
+  box-shadow: 0 0 0 4px rgba(240,57,6,0.18);
+}
+.page-head h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 0.96;
+  letter-spacing: -0.025em;
+  margin: 0 0 16px;
+}
+.page-head p {
+  font-size: 18px;
+  color: var(--ink-soft);
+  max-width: 56ch;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── grid of cards ── */
+.ads {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 24px;
+}
+.ad {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  padding: 8% 8%;
+  box-shadow: 0 1px 0 rgba(17,33,45,0.04), 0 22px 44px -28px rgba(17,33,45,0.20);
+  border: 1px solid var(--line);
+  font-size: clamp(14px, 1.4vw, 18px);
+}
+.ad .wm {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1.15em;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.ad .wm .mark {
+  width: 1.4em; height: 1.4em;
+  background: var(--purple);
+  border-radius: 0.32em;
+  display: inline-grid; place-items: center;
+  color: #fff;
+  font-size: 0.7em;
+}
+.ad .wm .mark::before { content: "✦"; }
+.ad .wm.center { justify-content: center; align-self: center; }
+.ad h2 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  color: var(--ink);
+  margin: 0;
+  text-wrap: balance;
+}
+.ad h2 .accent { color: var(--purple); }
+.ad p {
+  font-family: var(--font);
+  color: var(--ink-soft);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* card: negation list */
+.ad-neg { padding: 10% 8%; justify-content: space-between; gap: 1em; }
+.ad-neg .nx { display: grid; gap: 0.5em; align-content: center; flex: 1; }
+.ad-neg .row {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 32px);
+  display: grid; grid-template-columns: 1.5em 1fr; align-items: center; gap: 0.4em;
+  color: var(--ink);
+}
+.ad-neg .row.no { color: rgba(17,33,45,0.55); text-decoration: line-through; text-decoration-thickness: 2px; }
+.ad-neg .mk { font-family: var(--font); font-weight: 800; }
+.ad-neg .no .mk { color: rgba(17,33,45,0.5); }
+.ad-neg .yes .mk { color: var(--purple); font-size: 1.2em; }
+.ad-neg .yes { font-weight: 900; color: var(--ink); }
+
+/* card: testimonial big */
+.ad-quote { background: linear-gradient(180deg, #fff 0%, #B9C2CC 100%); justify-content: center; align-items: center; gap: 1.2em; text-align: center; padding: 8% 7%; }
+.ad-quote .q {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(18px, 2.2vw, 28px);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  position: relative;
+}
+.ad-quote .q::before { content: "“"; color: var(--purple); font-size: 2em; line-height: 0; vertical-align: -0.45em; margin-right: 0.1em; }
+.ad-quote .q::after { content: "”"; color: var(--purple); font-size: 2em; line-height: 0; vertical-align: -0.45em; margin-left: 0.05em; }
+.ad-quote .author { font-size: 0.95em; font-weight: 700; color: var(--ink); display: flex; gap: 0.4em; justify-content: center; align-items: center; }
+.ad-quote .author .stars { color: #F7B27A; letter-spacing: 0.1em; }
+.ad-quote .role { font-size: 0.85em; color: var(--ink-soft); margin-top: -0.4em; }
+.ad-quote .cta {
+  margin-top: 1em;
+  background: var(--ink);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.85em 1.6em;
+  border-radius: 12px;
+  font-size: 1em;
+}
+.ad-quote .cta.orange { background: var(--purple); }
+.ad-quote .fine { font-size: 0.78em; color: var(--ink-soft); margin-top: -0.4em; }
+
+/* card: tweet */
+.ad-tweet { background: var(--bg-2); justify-content: space-between; gap: 1.2em; padding: 8%; }
+.ad-tweet .head { font-family: var(--font-display); font-weight: 700; font-size: clamp(18px, 2.1vw, 26px); line-height: 1.1; letter-spacing: -0.015em; text-align: center; }
+.ad-tweet .post {
+  background: #fff; border-radius: 16px; padding: 1.1em 1.2em;
+  font-size: 0.85em;
+  display: flex; flex-direction: column; gap: 0.7em;
+  box-shadow: 0 6px 14px -10px rgba(17,33,45,0.20);
+}
+.ad-tweet .post .by { display: flex; align-items: flex-start; gap: 0.6em; }
+.ad-tweet .post .av { width: 2.4em; height: 2.4em; border-radius: 50%; background: linear-gradient(135deg, var(--peach), var(--lilac)); flex-shrink: 0; }
+.ad-tweet .post .by div b { display: block; color: var(--ink); }
+.ad-tweet .post .by div span { color: var(--muted); font-size: 0.85em; }
+.ad-tweet .post .x { margin-left: auto; font-weight: 800; color: var(--ink); font-size: 1.1em; }
+.ad-tweet .post .body { color: var(--ink); line-height: 1.4; font-size: 0.95em; }
+.ad-tweet .post .meta { color: var(--muted); font-size: 0.82em; border-top: 1px solid var(--line); padding-top: 0.6em; }
+.ad-tweet .post .meta b { color: var(--ink); }
+
+/* card: phone mockup */
+.ad-phone { padding: 6% 7% 0; justify-content: flex-start; align-items: center; text-align: center; gap: 0.9em; background: var(--bg); overflow: hidden; }
+.ad-phone .h2-wrap { display: flex; flex-direction: column; gap: 0.4em; align-items: center; }
+.ad-phone h2 { font-size: clamp(22px, 3vw, 38px); }
+.ad-phone p { font-size: 0.86em; max-width: 22ch; }
+.ad-phone .phone {
+  position: relative;
+  margin-top: 0.6em;
+  margin-bottom: -55%;
+  width: 90%;
+  aspect-ratio: 9/19;
+  background: #1c1c1c;
+  border-radius: 14% / 6.5%;
+  padding: 2.5% 2.5% 0;
+  box-shadow: 0 10px 30px -12px rgba(17,33,45,0.40);
+  overflow: hidden;
+}
+.ad-phone .scr {
+  background: #ECE5DD;
+  background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 8px 8px;
+  height: 100%;
+  border-radius: 4%;
+  padding: 14% 4% 4%;
+  display: flex; flex-direction: column;
+  gap: 6px;
+  font-size: 0.5em;
+}
+.ad-phone .scr .head { position: absolute; top: 2.5%; left: 2.5%; right: 2.5%; height: 12%; background: #1c1c1c; border-radius: 4% 4% 0 0; display: flex; align-items: center; gap: 4%; padding: 0 4%; color: #fff; font-size: 1.1em; }
+.ad-phone .scr .head .av { width: 1.7em; height: 1.7em; border-radius: 999px; background: var(--purple); display: grid; place-items: center; font-size: 0.7em; }
+.ad-phone .scr .bb { padding: 5px 7px; border-radius: 7px; max-width: 78%; line-height: 1.25; box-shadow: 0 1px 1px rgba(0,0,0,0.05); }
+.ad-phone .scr .me { background: #DCF8C6; align-self: flex-end; border-top-right-radius: 2px; }
+.ad-phone .scr .them { background: #fff; align-self: flex-start; border-top-left-radius: 2px; }
+.ad-phone .scr .typing { background: #fff; align-self: flex-start; display: inline-flex; gap: 3px; padding: 7px 9px; }
+.ad-phone .scr .typing span { width: 4px; height: 4px; border-radius: 999px; background: #9aa; }
+
+/* card: checklist orange ticks */
+.ad-checks { gap: 1em; padding: 9% 8%; justify-content: space-between; }
+.ad-checks .h-wrap { display: flex; flex-direction: column; gap: 0.3em; }
+.ad-checks h2 { font-size: clamp(22px, 2.8vw, 36px); }
+.ad-checks .list { display: grid; gap: 0.55em; }
+.ad-checks .item {
+  background: #fff; border-radius: 999px; padding: 0.7em 1em;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(13px, 1.3vw, 18px);
+  display: flex; align-items: center; gap: 0.6em;
+  border: 1px solid var(--line);
+}
+.ad-checks .item::before { content: "✓"; color: var(--purple); font-weight: 900; }
+.ad-checks .cta {
+  background: var(--ink); color: #fff; padding: 0.7em 1em; border-radius: 999px;
+  font-family: var(--font); font-weight: 700; font-size: 0.9em;
+  text-align: center; align-self: stretch;
+}
+
+/* card: four promises */
+.ad-promises { padding: 9% 8%; gap: 0.6em; justify-content: space-between; }
+.ad-promises .h-wrap { display: flex; flex-direction: column; gap: 0.3em; }
+.ad-promises h2 { font-size: clamp(22px, 2.6vw, 32px); }
+.ad-promises p { font-size: 0.88em; }
+.ad-promises .rows { display: grid; gap: 0.85em; align-content: center; flex: 1; }
+.ad-promises .r { display: grid; grid-template-columns: 2.4em 1fr; gap: 0.7em; align-items: flex-start; }
+.ad-promises .r .ic { width: 2.4em; height: 2.4em; border: 1.5px solid var(--purple); border-radius: 50%; color: var(--purple); display: grid; place-items: center; font-weight: 800; flex-shrink: 0; }
+.ad-promises .r b { display: block; font-family: var(--font-display); font-weight: 700; font-size: 1em; margin-bottom: 0.1em; }
+.ad-promises .r span { font-size: 0.82em; color: var(--ink-soft); line-height: 1.35; }
+
+/* card: tax service */
+.ad-tax { justify-content: space-between; text-align: center; gap: 1em; padding: 8%; }
+.ad-tax .h-wrap { display: flex; flex-direction: column; gap: 0.4em; align-items: center; }
+.ad-tax h2 { font-size: clamp(22px, 2.8vw, 36px); }
+.ad-tax .sub { font-size: 0.85em; color: var(--ink-soft); font-style: italic; max-width: 22ch; margin: 0 auto; }
+.ad-tax .ill {
+  flex: 1; display: grid; place-items: center; position: relative;
+}
+.ad-tax .ill svg { width: 65%; height: 60%; max-height: 220px; }
+.ad-tax .cta { background: var(--ink); color: #fff; padding: 0.9em 1.6em; border-radius: 12px; font-family: var(--font); font-weight: 700; font-size: 1em; align-self: center; }
+
+/* card: fox plane */
+.ad-fox-plane { background: var(--bg); padding: 8%; justify-content: space-between; text-align: center; gap: 0.8em; }
+.ad-fox-plane h2 { font-size: clamp(20px, 2.4vw, 32px); }
+.ad-fox-plane .ill { flex: 1; display: grid; place-items: center; padding: 1em 0; }
+.ad-fox-plane .ill img { width: 70%; max-width: 280px; height: auto; }
+.ad-fox-plane .h2-b { font-family: var(--font-display); font-weight: 900; font-size: clamp(20px, 2.4vw, 32px); line-height: 1.0; }
+.ad-fox-plane .wm-block { display: flex; flex-direction: column; align-items: center; gap: 0.2em; }
+.ad-fox-plane .wm-block small { font-size: 0.8em; color: var(--ink-soft); }
+
+/* card: parachute */
+.ad-parachute { background: var(--bg); padding: 8%; justify-content: space-between; text-align: center; gap: 0.8em; }
+.ad-parachute h2 { font-size: clamp(20px, 2.4vw, 32px); }
+.ad-parachute .ill { background: var(--purple); border-radius: 60% / 35%; flex: 1; display: grid; place-items: center; padding: 6% 4%; margin: 0.6em 0; }
+.ad-parachute .ill svg { width: 50%; height: 90%; }
+.ad-parachute .wm-block { display: flex; flex-direction: column; align-items: center; gap: 0.2em; }
+.ad-parachute .wm-block small { font-size: 0.8em; color: var(--ink-soft); }
+
+/* card: google answer */
+.ad-google { background: linear-gradient(180deg, #fff 0%, #B9C2CC 60%, #6b7787 100%); padding: 9% 7%; justify-content: space-between; gap: 1em; color: var(--ink); }
+.ad-google h2 { font-size: clamp(22px, 2.6vw, 34px); text-align: center; }
+.ad-google .box { background: #fff; border-radius: 18px; padding: 1em 1.1em; display: flex; flex-direction: column; gap: 0.6em; font-size: 0.85em; box-shadow: 0 12px 24px -16px rgba(17,33,45,0.25); }
+.ad-google .box .q { display: flex; align-items: flex-start; gap: 0.5em; color: var(--ink-soft); font-weight: 500; }
+.ad-google .box .q::before { content: "🔍"; filter: grayscale(1) opacity(0.6); }
+.ad-google .box .opt { display: flex; gap: 0.5em; align-items: center; color: var(--ink-soft); padding-left: 0.2em; }
+.ad-google .box .opt::before { content: "●"; color: rgba(17,33,45,0.4); font-size: 0.7em; }
+.ad-google .box .pick { background: var(--purple); color: #fff; padding: 0.7em 0.9em; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; gap: 0.5em; }
+.ad-google .box .pick::before { content: "→"; }
+.ad-google .wm { color: #fff; align-self: center; }
+
+/* card: woman + glass */
+.ad-photo { background: #d4c2b4; justify-content: flex-end; gap: 0; padding: 0; position: relative; }
+.ad-photo::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, #d4b8a0 0%, #c9a890 50%, #b8907a 100%); }
+.ad-photo .wm { position: absolute; top: 6%; left: 8%; z-index: 2; }
+.ad-photo .fox-emoji { position: absolute; left: 6%; bottom: 28%; font-size: 3.5em; z-index: 2; }
+.ad-photo .glass {
+  position: relative; z-index: 2;
+  margin: 6% 8% 8%;
+  background: rgba(255,255,255,0.32);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 18px;
+  padding: 1.4em 1.3em;
+  display: flex; flex-direction: column; gap: 0.5em;
+}
+.ad-photo h2 { font-size: clamp(20px, 2.4vw, 32px); color: var(--ink); }
+.ad-photo h2 em { color: var(--purple); font-style: normal; }
+.ad-photo p { font-size: 0.86em; color: var(--ink-soft); }
+
+/* card: bg gradient blue + chat phone */
+.ad-blue { background: linear-gradient(180deg, #fff 0%, #8b96a3 100%); padding: 8% 7%; align-items: center; justify-content: space-between; gap: 1em; text-align: center; }
+.ad-blue h2 { font-size: clamp(22px, 2.8vw, 36px); }
+.ad-blue h2 .accent { color: var(--purple); }
+.ad-blue p { font-size: 0.88em; max-width: 24ch; }
+.ad-blue .phone { width: 78%; }
+.ad-blue .ctab {
+  background: var(--purple); color: #fff;
+  padding: 0.85em 1.5em; border-radius: 999px;
+  font-family: var(--font); font-weight: 700; font-size: 1em;
+  align-self: center;
+}
+
+/* card: two figures + headline */
+.ad-figures { padding: 8%; justify-content: space-between; gap: 0.8em; text-align: center; }
+.ad-figures h2 { font-size: clamp(20px, 2.6vw, 34px); text-align: left; }
+.ad-figures h2 .accent { color: var(--purple); }
+.ad-figures .ill { background: var(--purple); border-radius: 56% / 38%; flex: 1; display: grid; place-items: center; padding: 12% 10%; margin: 0.4em 0; min-height: 0; }
+.ad-figures .ill svg { width: 80%; height: 80%; }
+.ad-figures p { font-size: 0.85em; }
+
+/* card: full check ad */
+.ad-fullcheck { padding: 9% 8%; gap: 0.8em; justify-content: space-between; }
+.ad-fullcheck h2 { font-size: clamp(24px, 3vw, 40px); }
+.ad-fullcheck h2 .accent { color: var(--purple); }
+.ad-fullcheck .list { display: grid; gap: 0.6em; padding: 0; margin: 0; list-style: none; }
+.ad-fullcheck .list li {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(14px, 1.5vw, 20px);
+  display: flex; gap: 0.5em; align-items: baseline;
+}
+.ad-fullcheck .list li::before { content: "✓"; color: var(--ink); font-weight: 900; }
+.ad-fullcheck .cta { background: var(--ink); color: #fff; padding: 0.85em 1em; border-radius: 8px; font-family: var(--font); font-weight: 600; font-size: 0.9em; text-align: center; }
+
+/* small responsive */
+@media (max-width: 720px) {
+  body { padding: 40px 16px 64px; }
+  .ads { gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-head">
+  <div class="kicker"><span class="sq"></span> Ads · v1</div>
+  <h1>Candosa <em style="font-weight:400;color:rgba(17,33,45,0.55)">social</em></h1>
+  <p>Cards in the bolder Playfair voice — heavy serif headlines on a cream surface, brand orange for the moments that matter. Built at 4:5 (1080×1350) for Instagram and similar.</p>
+</header>
+
+<div class="ads">
+
+  <!-- 1. Negation list "Solo WhatsApp" -->
+  <div class="ad ad-neg">
+    <div></div>
+    <div class="nx">
+      <div class="row no"><span class="mk">✕</span><span>Descargar otra app más</span></div>
+      <div class="row no"><span class="mk">✕</span><span>Aprender otro portal</span></div>
+      <div class="row no"><span class="mk">✕</span><span>Esperar días a tu gestor</span></div>
+      <div class="row yes"><span class="mk">✓</span><span>Solo WhatsApp</span></div>
+    </div>
+    <div class="wm center"><span class="mark"></span>Candosa</div>
+  </div>
+
+  <!-- 2. Big quote w/ ink CTA -->
+  <div class="ad ad-quote">
+    <div class="wm" style="position:absolute;top:8%;left:50%;transform:translateX(-50%);"><span class="mark"></span>Candosa</div>
+    <div class="q">En 5 minutos ya tenía respuesta a mis dudas fiscales. Por WhatsApp. Sin llamadas, sin esperas, sin portales. Candosa me cambió la vida como autónomo.</div>
+    <div class="author">Carlos M. <span class="stars">★★★★★</span></div>
+    <div class="role">Freelance · Diseñador gráfico</div>
+    <div class="cta">Empieza hoy →</div>
+    <div class="fine">25% de descuento los primeros 3 meses. Precio fijo sin sorpresas.</div>
+  </div>
+
+  <!-- 3. Tweet style -->
+  <div class="ad ad-tweet">
+    <div class="head">Lo que dicen los autónomos<br>que ya trabajan con nosotros</div>
+    <div class="post">
+      <div class="by">
+        <div class="av"></div>
+        <div>
+          <b>Ana Molina</b>
+          <span>@anamolina_freelance</span>
+        </div>
+        <div class="x">𝕏</div>
+      </div>
+      <div class="body">Llevaba años con miedo a hacer mal la declaración. Desde que estoy con @Candosa cambió todo.<br><br>Me avisan antes de cada plazo. Responden el mismo día. Y lo mejor: entiendo lo que está pasando con mis impuestos por primera vez en mi vida.<br><br>Para cualquier autónoma que trabaje sola, imprescindible.</div>
+      <div class="meta"><b>847</b> Likes · <b>124</b> Reposts<br>9:41 AM · 8 Jan 2026</div>
+    </div>
+    <div class="wm center"><span class="mark"></span>Candosa</div>
+  </div>
+
+  <!-- 4. Conoce a tu asesor — phone -->
+  <div class="ad ad-phone">
+    <div class="wm" style="margin-bottom:0.8em;"><span class="mark"></span>Candosa</div>
+    <div class="h2-wrap">
+      <h2>Conoce a tu asesor.<br>Ya está en WhatsApp.</h2>
+      <p>Facturas. Impuestos. Declaraciones. Todo gestionado, solo envía un mensaje.</p>
+    </div>
+    <div class="phone">
+      <div class="scr">
+        <div class="head"><div class="av">🦊</div><div><b>Gestora (Candosa)</b></div></div>
+        <div class="bb me">Hola, ¿puedes ayudarme con mi declaración?</div>
+        <div class="bb them">¡Por supuesto! Ya la he preparado a partir de tus facturas. ¿Te mando el resumen?</div>
+        <div class="bb me">Sí, por favor 🙌</div>
+        <div class="bb them">¡Listo! Todo está presentado. Ya está todo hecho ✅</div>
+        <div class="bb typing"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Tax preparation (English) -->
+  <div class="ad ad-tax">
+    <div class="wm" style="align-self:center"><span class="mark"></span>Candosa</div>
+    <div class="h-wrap">
+      <h2>Professional<br>Tax Preparation<br>Service</h2>
+      <div class="sub">"Our experienced team ensures your taxes are done right on time, every time."</div>
+    </div>
+    <div class="ill">
+      <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="22" y="18" width="50" height="68" rx="3" fill="#E8DDCB" stroke="#11212d" stroke-width="2"/>
+        <text x="33" y="48" font-family="serif" font-weight="900" font-size="22" fill="#11212d">TAX</text>
+        <path d="M30 60 Q40 56 50 60 T68 60" stroke="#11212d" stroke-width="1.6" fill="none"/>
+        <path d="M30 68 Q40 64 50 68 T68 68" stroke="#11212d" stroke-width="1.6" fill="none"/>
+        <rect x="65" y="58" width="35" height="22" rx="3" fill="#E0D2BD" stroke="#11212d" stroke-width="2"/>
+        <rect x="65" y="64" width="35" height="4" fill="#11212d"/>
+        <circle cx="20" cy="74" r="5" fill="#D6BFA6" stroke="#11212d" stroke-width="1.6"/>
+        <circle cx="20" cy="82" r="5" fill="#D6BFA6" stroke="#11212d" stroke-width="1.6"/>
+        <circle cx="80" cy="32" r="6" fill="#E0D2BD" stroke="#11212d" stroke-width="1.6"/>
+        <text x="76" y="36" font-size="8" font-weight="700" fill="#11212d">%</text>
+      </svg>
+    </div>
+    <div class="cta">Empieza hoy →</div>
+  </div>
+
+  <!-- 6. Fox plane — Emprender es tirarse al vacío -->
+  <div class="ad ad-fox-plane">
+    <h2>Emprender es<br>tirarse al vacío.</h2>
+    <div class="ill"><img src="assets/fox_03.svg" alt=""></div>
+    <div class="h2-b">Nosotros ponemos<br>el paracaídas.</div>
+    <div class="wm-block">
+      <div class="wm"><span class="mark"></span>Candosa</div>
+      <small>Tu gestor personal por WhatsApp.</small>
+    </div>
+  </div>
+
+  <!-- 7. Parachute — same headline, abstract -->
+  <div class="ad ad-parachute">
+    <h2>Emprender es<br>tirarse al vacío.</h2>
+    <div class="ill">
+      <svg viewBox="0 0 100 130" aria-hidden="true">
+        <path d="M20 40 Q50 18 80 40 Q70 50 65 55 L60 60 Q50 58 40 60 L35 55 Q30 50 20 40 Z" fill="#fff"/>
+        <path d="M20 40 L50 85 M30 46 L50 85 M40 50 L50 85 M50 50 L50 85 M60 50 L50 85 M70 46 L50 85 M80 40 L50 85" stroke="#0A0A0A" stroke-width="1.5"/>
+        <rect x="46" y="85" width="8" height="20" rx="3" fill="#0A0A0A"/>
+        <circle cx="50" cy="88" r="3.5" fill="#0A0A0A"/>
+      </svg>
+    </div>
+    <h2>Nosotros ponemos<br>el paracaídas.</h2>
+    <div class="wm-block">
+      <div class="wm"><span class="mark"></span>Candosa</div>
+      <small>Tu gestor personal por WhatsApp.</small>
+    </div>
+  </div>
+
+  <!-- 8. Tus impuestos tardaban semanas — checklist pills -->
+  <div class="ad ad-checks">
+    <div class="h-wrap">
+      <h2>Tus impuestos<br>tardaban semanas.</h2>
+      <h2 style="font-weight:700">Ahora es un mensaje<br>de <span class="accent">WhatsApp</span>.</h2>
+    </div>
+    <div class="list">
+      <div class="item">Creación de facturas — el mismo día</div>
+      <div class="item">Declaraciones fiscales — las gestionamos por ti</div>
+      <div class="item">Situación fiscal — siempre al día</div>
+    </div>
+    <div class="cta">25% de descuento los primeros 3 meses. Empieza hoy →</div>
+    <div class="wm center"><span class="mark"></span>Candosa</div>
+  </div>
+
+  <!-- 9. Big quote — white bg + orange CTA -->
+  <div class="ad ad-quote" style="background:var(--bg);">
+    <div class="wm" style="position:absolute;top:8%;left:50%;transform:translateX(-50%);"><span class="mark"></span>Candosa</div>
+    <div class="q">En 5 minutos ya tenía respuesta a mis dudas fiscales. Por WhatsApp. Sin llamadas, sin esperas, sin portales. Candosa me cambió la vida como autónomo.</div>
+    <div class="author">Carlos M. <span class="stars">★★★★★</span></div>
+    <div class="role">Freelance · Diseñador gráfico</div>
+    <div class="cta orange">Empieza hoy →</div>
+    <div class="fine">25% de descuento los primeros 3 meses. Precio fijo sin sorpresas.</div>
+  </div>
+
+  <!-- 10. Tu gestor fiscal a un mensaje — blue gradient phone -->
+  <div class="ad ad-blue">
+    <div class="wm"><span class="mark"></span>Candosa</div>
+    <h2>Tu gestor fiscal,<br>a un mensaje.</h2>
+    <p>En whatsapp. Sin apps. Sin portales.</p>
+    <div class="phone" style="position:relative;aspect-ratio:9/19;background:#1c1c1c;border-radius:14%/6.5%;padding:2.5% 2.5% 0;overflow:hidden;box-shadow:0 10px 30px -12px rgba(17,33,45,0.40);">
+      <div class="scr" style="background:#ECE5DD;background-image:radial-gradient(rgba(0,0,0,0.06) 1px,transparent 1px);background-size:8px 8px;height:100%;border-radius:4%;padding:14% 4% 4%;display:flex;flex-direction:column;gap:6px;font-size:0.5em;">
+        <div class="head" style="position:absolute;top:2.5%;left:2.5%;right:2.5%;height:12%;background:#1c1c1c;border-radius:4% 4% 0 0;display:flex;align-items:center;gap:4%;padding:0 4%;color:#fff;font-size:1.1em;"><div class="av" style="width:1.7em;height:1.7em;border-radius:999px;background:var(--purple);display:grid;place-items:center;font-size:0.7em">🦊</div><div><b>Gestora (Candosa)</b></div></div>
+        <div class="bb me" style="background:#DCF8C6;align-self:flex-end;border-top-right-radius:2px;padding:5px 7px;border-radius:7px;max-width:78%;line-height:1.25">Hola! Necesito una factura para un cliente nuevo</div>
+        <div class="bb them" style="background:#fff;align-self:flex-start;border-top-left-radius:2px;padding:5px 7px;border-radius:7px;max-width:78%;line-height:1.25">Listo! Te la preparo enseguida 📄<br>Dame los datos del cliente</div>
+        <div class="bb me" style="background:#DCF8C6;align-self:flex-end;padding:5px 7px;border-radius:7px;max-width:78%">Te los mando ahora</div>
+        <div class="bb them" style="background:#fff;align-self:flex-start;padding:5px 7px;border-radius:7px;max-width:78%">Factura enviada a tu cliente ✅<br>Todo gestionado.</div>
+      </div>
+    </div>
+    <div class="ctab">Empieza hoy →</div>
+  </div>
+
+  <!-- 11. Cuatro compromisos -->
+  <div class="ad ad-promises">
+    <div class="h-wrap">
+      <h2>Cuatro compromisos.<br>Sin letra pequeña.</h2>
+      <p>Para que puedas centrarte en lo que construyes.</p>
+    </div>
+    <div class="rows">
+      <div class="r"><div class="ic">📞</div><div><b>Todo desde el móvil, todo por WhatsApp</b><span>Diseñado para la vida del emprendedor.</span></div></div>
+      <div class="r"><div class="ic">💰</div><div><b>Precio fijo, sin sorpresas</b><span>Lo que ves es lo que pagas.</span></div></div>
+      <div class="r"><div class="ic">👍</div><div><b>Siempre sabes lo que está pasando</b><span>Sin esperas. Sin sorpresas de última hora.</span></div></div>
+      <div class="r"><div class="ic">💬</div><div><b>Una persona que conoce tu negocio</b><span>No un ticket. Alguien que conoce tu historial.</span></div></div>
+    </div>
+    <div class="wm center"><span class="mark"></span>Candosa</div>
+  </div>
+
+  <!-- 12. Miles de autónomos — Google answer -->
+  <div class="ad ad-google">
+    <h2>Miles de autónomos ya<br>encontraron la respuesta.</h2>
+    <div class="box">
+      <div class="q">cómo gestionar mi contabilidad siendo autónomo</div>
+      <div class="opt">Contratar una gestoría tradicional</div>
+      <div class="opt">Aprender a hacerlo tú solo</div>
+      <div class="pick">Candosa: tu gestor en WhatsApp <span style="margin-left:auto">✓</span></div>
+    </div>
+    <div class="wm"><span class="mark"></span>Candosa</div>
+  </div>
+
+  <!-- 13. Para de perseguir a tu asesor — photo style -->
+  <div class="ad ad-photo">
+    <div class="wm"><span class="mark"></span>Candosa</div>
+    <div class="fox-emoji">🦊</div>
+    <div class="glass">
+      <h2>Para de<br>perseguir<br>a tu <em>asesor</em>.</h2>
+      <p>El nuestro responde el mismo día, directamente por WhatsApp.</p>
+    </div>
+  </div>
+
+  <!-- 14. Tu gestor dedicado en WhatsApp — full check ad -->
+  <div class="ad ad-fullcheck">
+    <h2>Tu gestor<br><span class="accent">dedicado</span> en<br>Whatsapp</h2>
+    <ul class="list">
+      <li>Todo por WhatsApp, sin apps, sin portales</li>
+      <li>Declaraciones fiscales presentadas por ti</li>
+      <li>Facturas gestionadas el mismo día</li>
+    </ul>
+    <div class="cta">25% de descuento los primeros 3 meses. Empieza hoy →</div>
+    <div class="wm center"><span class="mark"></span>Candosa</div>
+  </div>
+
+  <!-- 15. Tu gestor fiscal a un Whatsapp — two figures -->
+  <div class="ad ad-figures">
+    <h2>Tu gestor fiscal,<br>a un <span class="accent">Whatsapp</span>.</h2>
+    <div class="ill">
+      <svg viewBox="0 0 100 80" aria-hidden="true">
+        <ellipse cx="35" cy="46" rx="8" ry="12" fill="#11212d"/>
+        <circle cx="35" cy="30" r="6" fill="#11212d"/>
+        <rect x="29" y="54" width="12" height="20" fill="#11212d"/>
+        <ellipse cx="65" cy="46" rx="8" ry="12" fill="#11212d"/>
+        <circle cx="65" cy="30" r="6" fill="#11212d"/>
+        <rect x="59" y="54" width="12" height="20" fill="#11212d"/>
+        <ellipse cx="50" cy="18" rx="8" ry="6" fill="#FDFCFA"/>
+        <circle cx="47" cy="18" r="0.8" fill="#11212d"/>
+        <circle cx="50" cy="18" r="0.8" fill="#11212d"/>
+        <circle cx="53" cy="18" r="0.8" fill="#11212d"/>
+      </svg>
+    </div>
+    <p style="text-align:center">Sin app. Sin reuniones. Solo resultados.</p>
+    <div class="wm center"><span class="mark"></span>Candosa</div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -479,16 +479,17 @@ h1.hero-title {
   font-size: clamp(44px, 5.6vw, 92px);
   line-height: 0.98;
   letter-spacing: -0.025em;
-  font-weight: 700;
+  font-weight: 900;
   margin: 0 0 28px;
   color: var(--ink);
   text-wrap: balance;
   max-width: 16ch;
 }
-html[data-font="sans"] h1.hero-title {
+html[data-font^="sans"] h1.hero-title {
   font-family: var(--font);
   letter-spacing: -0.045em;
 }
+html[data-font="serif-medium"] h1.hero-title { font-weight: 300; }
 h1.hero-title .accent {
   color: var(--purple);
   font-style: normal;
@@ -936,21 +937,22 @@ h2.section-title {
   font-size: clamp(40px, 5vw, 76px);
   line-height: 0.98;
   letter-spacing: -0.02em;
-  font-weight: 700;
+  font-weight: 900;
   margin: 0 0 24px;
   color: var(--ink);
   max-width: 18ch;
   text-wrap: balance;
 }
-html[data-font="sans"] h2.section-title {
+html[data-font^="sans"] h2.section-title {
   font-family: var(--font);
   letter-spacing: -0.04em;
 }
+html[data-font="serif-medium"] h2.section-title { font-weight: 400; }
 h2.section-title .accent { color: color-mix(in oklab, var(--sky) 55%, var(--ink)); }
 h2.section-title .outline {
   color: var(--bg);
   -webkit-text-stroke: 2.25px rgba(17,33,45,0.55);
-  font-weight: 700;
+  font-weight: 900;
   paint-order: stroke fill;
 }
 .section-lede {
@@ -1252,16 +1254,17 @@ h2.section-title .outline {
   font-size: clamp(40px, 5vw, 76px);
   line-height: 0.98;
   letter-spacing: -0.02em;
-  font-weight: 700;
+  font-weight: 900;
   margin: 0 0 20px;
   color: var(--ink);
   max-width: 20ch;
   text-wrap: balance;
 }
-html[data-font="sans"] .tasks-section h2 {
+html[data-font^="sans"] .tasks-section h2 {
   font-family: var(--font);
   letter-spacing: -0.04em;
 }
+html[data-font="serif-medium"] .tasks-section h2 { font-weight: 400; }
 .tasks-section h2 .accent { color: var(--success); }
 .tasks-section .lede {
   font-size: 18px;
@@ -1534,16 +1537,17 @@ html[data-font="sans"] .tasks-section h2 {
   font-size: clamp(40px, 5vw, 76px);
   line-height: 0.98;
   letter-spacing: -0.02em;
-  font-weight: 700;
+  font-weight: 900;
   margin: 0 0 48px;
   color: var(--ink);
   max-width: 16ch;
   text-wrap: balance;
 }
-html[data-font="sans"] .steps-section h2 {
+html[data-font^="sans"] .steps-section h2 {
   font-family: var(--font);
   letter-spacing: -0.04em;
 }
+html[data-font="serif-medium"] .steps-section h2 { font-weight: 400; }
 .steps-section h2 .accent { color: color-mix(in oklab, var(--lilac) 50%, var(--ink)); }
 .steps-section h2 .outline { color: var(--bg); -webkit-text-stroke: 2.25px rgba(17,33,45,0.55); paint-order: stroke fill; }
 .steps {
@@ -1619,16 +1623,17 @@ html[data-font="sans"] .steps-section h2 {
   font-size: clamp(32px, 3.8vw, 58px);
   line-height: 1.02;
   letter-spacing: -0.02em;
-  font-weight: 700;
+  font-weight: 900;
   margin: 0 0 20px;
   color: var(--ink);
   max-width: 22ch;
   text-wrap: balance;
 }
-html[data-font="sans"] .testi h2 {
+html[data-font^="sans"] .testi h2 {
   font-family: var(--font);
   letter-spacing: -0.04em;
 }
+html[data-font="serif-medium"] .testi h2 { font-weight: 400; }
 .testi h2 .accent { color: color-mix(in oklab, var(--peach) 35%, var(--purple)); }
 .testi h2 .outline {
   color: var(--bg);
@@ -3071,7 +3076,7 @@ h1, h2, h3 {
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </button>
       <a href="#" class="ghost">Entrar</a>
-      <a href="onboard/Onboarding.html" class="btn">Empieza ahora</a>
+      <a href="https://app.candosa.com/" class="btn">Empieza ahora</a>
     </div>
     <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
       <span></span><span></span><span></span>
@@ -3095,7 +3100,7 @@ h1, h2, h3 {
     <p class="lede">Un equipo humano con IA en cada paso — desde tu primer mensaje hasta cerrar el trimestre. Facturas, IVA, IRPF y trámites, todo por el WhatsApp que ya usas.</p>
     <div class="hero-ctas">
       <a href="https://api.whatsapp.com/message/EQHESE4KF4D7C1?autoload=1&app_absent=0" class="btn btn-light lg" target="_blank" rel="noopener">Empieza por WhatsApp <span class="arr">→</span></a>
-      <a href="onboard/Onboarding.html" class="btn btn-ghost-light lg">Empieza online</a>
+      <a href="https://app.candosa.com/" class="btn btn-ghost-light lg">Empieza online</a>
     </div>
     <div class="hero-showcase">
       <div class="hero-meta">
@@ -3337,12 +3342,11 @@ h1, h2, h3 {
       </div>
 
       <!-- knowledge base -->
-      <div class="tile tile-fox">
+      <div class="tile">
         <div>
           <h3>Conocimiento fiscal, siempre al día.</h3>
           <p>La IA lee cada cambio normativo el mismo día. Tu gestora lo aplica a tu caso. Sin sorpresas, sin "no lo sabíamos".</p>
         </div>
-        <img class="tile-fox-img" src="assets/foxHole.gif" alt="" aria-hidden="true">
         <div class="tag-row">
           <span>Verifactu</span>
           <span>Factura-e</span>
@@ -3547,7 +3551,7 @@ h1, h2, h3 {
       <h2>Empieza esta tarde.<br>Cierra los papeles esta noche.</h2>
       <p>Sin migración manual. Sin tarjeta. Sin permanencia. Solo una conversación.</p>
       <a href="https://api.whatsapp.com/message/EQHESE4KF4D7C1?autoload=1&app_absent=0" class="btn btn-light lg" target="_blank" rel="noopener">Empieza por WhatsApp <span class="arr">→</span></a>
-      <a href="onboard/Onboarding.html" class="btn btn-ghost-light lg">Empieza online</a>
+      <a href="https://app.candosa.com/" class="btn btn-ghost-light lg">Empieza online</a>
     </div>
     <div class="price-grid">
       <div class="price-card">
@@ -3560,7 +3564,7 @@ h1, h2, h3 {
           <div>Verifactu y factura-e</div>
           <div>Gestor humano si algo falla</div>
         </div>
-        <a href="onboard/Onboarding.html" class="px-cta">Empezar con Plan Auto</a>
+        <a href="https://app.candosa.com/" class="px-cta">Empezar con Plan Auto</a>
       </div>
       <div class="price-card featured">
         <span class="badge">Más elegido</span>
@@ -3573,7 +3577,7 @@ h1, h2, h3 {
           <div>Tu gestora dedicada</div>
           <div>Verifactu y factura-e</div>
         </div>
-        <a href="onboard/Onboarding.html" class="px-cta">Empezar con tu gestora</a>
+        <a href="https://app.candosa.com/" class="px-cta">Empezar con tu gestora</a>
       </div>
     </div>
   </div>
@@ -3584,7 +3588,7 @@ h1, h2, h3 {
     <div class="foot-brand-cell">
       <h3>Candosa<span class="accent">.</span></h3>
       <p>La gestoría que cabe en tu móvil. Hecha en Madrid para autónomos y micro-pymes.</p>
-      <a href="onboard/Onboarding.html" class="btn">Empieza ahora <span class="arr">→</span></a>
+      <a href="https://app.candosa.com/" class="btn">Empieza ahora <span class="arr">→</span></a>
     </div>
     <div class="foot-col">
       <h4>Producto</h4>
@@ -3776,16 +3780,26 @@ h1, h2, h3 {
   var btn = document.getElementById('fontToggle');
   if (!btn) return;
   var html = document.documentElement;
+  var order = ['serif', 'sans', 'serif-medium'];
+  var styles = {
+    'serif':        { family: 'var(--font-display)', weight: '900', label: 'Fuente: Playfair 900' },
+    'sans':         { family: 'var(--font)',         weight: '700', label: 'Fuente: Roboto 700' },
+    'serif-medium': { family: 'var(--font-display)', weight: '400', label: 'Fuente: Playfair 400' }
+  };
   function sync(f) {
-    btn.title = f === 'sans' ? 'Fuente: sans' : 'Fuente: serif';
-    btn.style.fontFamily = f === 'sans' ? 'var(--font)' : 'var(--font-display)';
+    var s = styles[f] || styles.serif;
+    btn.title = s.label;
+    btn.style.fontFamily = s.family;
+    btn.style.fontWeight = s.weight;
+    btn.style.fontStyle = s.italic ? 'italic' : 'normal';
   }
   sync(html.getAttribute('data-font') || 'serif');
   btn.addEventListener('click', function() {
-    var cur = html.getAttribute('data-font') === 'sans' ? 'serif' : 'sans';
-    html.setAttribute('data-font', cur);
-    try { localStorage.setItem('font', cur); } catch (e) {}
-    sync(cur);
+    var cur = html.getAttribute('data-font') || 'serif';
+    var next = order[(order.indexOf(cur) + 1) % order.length];
+    html.setAttribute('data-font', next);
+    try { localStorage.setItem('font', next); } catch (e) {}
+    sync(next);
   });
 })();
 (function() {

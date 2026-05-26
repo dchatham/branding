@@ -18,6 +18,8 @@
     }
     if (effective === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
     document.documentElement.setAttribute('data-theme-pref', stored);
+    var storedFont = localStorage.getItem('font') || 'serif';
+    document.documentElement.setAttribute('data-font', storedFont);
   } catch (e) {}
 })();
 </script>
@@ -120,14 +122,21 @@ a:hover { text-decoration: underline; }
   isolation: isolate;
   display: flex; align-items: center;
 }
-.page-head > div {
+.page-head-inner {
   position: relative;
   z-index: 1;
-  max-width: var(--maxw);
+  max-width: 1120px;
   margin: 0 auto;
   padding: 0 32px;
   width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
+  flex-wrap: wrap;
 }
+.page-head-left { flex: 1 1 360px; min-width: 0; }
+.page-head .meta { flex: 0 1 360px; }
 .page-head::before {
   content: "";
   position: absolute;
@@ -158,13 +167,6 @@ a:hover { text-decoration: underline; }
   z-index: -1;
   pointer-events: none;
 }
-.page-head > div {
-  position: relative;
-  z-index: 1;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  width: 100%;
-}
 .page-head .kicker {
   display: inline-flex; align-items: center; gap: 10px;
   background: rgba(17,33,45,0.05);
@@ -186,10 +188,10 @@ a:hover { text-decoration: underline; }
   box-shadow: 0 0 0 4px rgba(240,57,6,0.18);
 }
 .page-head h1 {
-  font-family: var(--font);
+  font-family: var(--font-display);
   font-size: clamp(49px, 8.5vw, 124px);
   line-height: 0.94;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.025em;
   font-weight: 900;
   margin: 0 0 28px;
   color: var(--ink);
@@ -202,6 +204,13 @@ a:hover { text-decoration: underline; }
   font-weight: 900;
   paint-order: stroke fill;
 }
+html[data-font^="sans"] .page-head h1,
+html[data-font^="sans"] .page-head h1 .outline {
+  font-family: var(--font);
+  letter-spacing: -0.045em;
+}
+html[data-font="serif-medium"] .page-head h1,
+html[data-font="serif-medium"] .page-head h1 .outline { font-weight: 400; }
 .page-head .meta {
   font-size: clamp(17px, 1.4vw, 20px);
   color: var(--ink-soft);
@@ -237,11 +246,17 @@ section.sg > header {
   flex-wrap: wrap;
 }
 section.sg h2 {
+  font-family: var(--font-display);
   font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
+  font-weight: 900;
+  letter-spacing: -0.02em;
   margin: 0;
 }
+html[data-font^="sans"] section.sg h2 {
+  font-family: var(--font);
+  letter-spacing: -0.03em;
+}
+html[data-font="serif-medium"] section.sg h2 { font-weight: 400; }
 section.sg .note {
   font-size: 13.5px;
   color: var(--ink-soft);
@@ -958,6 +973,7 @@ section.sg h2,
       <a href="#shadows">Shadows</a>
     </div>
     <div class="nav-cta">
+      <button type="button" id="fontToggle" class="theme-toggle" aria-label="Cambiar fuente" title="Fuente: Playfair 700" style="font-family:var(--font-display);font-weight:700;font-size:15px;width:auto;padding:0 12px;">Aa</button>
       <button id="themeToggle" class="theme-toggle" type="button" aria-label="Cambiar tema" title="Tema: sistema">
         <svg class="icon-system" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -970,11 +986,13 @@ section.sg h2,
 <div class="wrap">
 
   <header class="page-head">
-    <div>
-      <div class="kicker"><span class="sq"></span> Styleguide v1</div>
-      <h1>Candosa <span class="outline">design tokens</span></h1>
+    <div class="page-head-inner">
+      <div class="page-head-left">
+        <div class="kicker"><span class="sq"></span> Styleguide v1</div>
+        <h1>Candosa <span class="outline">design tokens</span></h1>
+      </div>
+      <p class="meta">Colors, gradients, type and components used across <b>candosa.com</b>. Tokens live in <code>:root</code> and can be referenced as CSS variables.</p>
     </div>
-    <p class="meta">Colors, gradients, type and components used across <b>candosa.com</b>. Tokens live in <code>:root</code> and can be referenced as CSS variables.</p>
   </header>
 
   <!-- INFLUENCES -->
@@ -1251,6 +1269,32 @@ section.sg h2,
     });
   }
   apply(get());
+})();
+(function() {
+  var btn = document.getElementById('fontToggle');
+  if (!btn) return;
+  var html = document.documentElement;
+  var order = ['serif', 'sans', 'serif-medium'];
+  var styles = {
+    'serif':        { family: 'var(--font-display)', weight: '900', label: 'Fuente: Playfair 900' },
+    'sans':         { family: 'var(--font)',         weight: '700', label: 'Fuente: Roboto 700' },
+    'serif-medium': { family: 'var(--font-display)', weight: '400', label: 'Fuente: Playfair 400' }
+  };
+  function sync(f) {
+    var s = styles[f] || styles.serif;
+    btn.title = s.label;
+    btn.style.fontFamily = s.family;
+    btn.style.fontWeight = s.weight;
+    btn.style.fontStyle = s.italic ? 'italic' : 'normal';
+  }
+  sync(html.getAttribute('data-font') || 'serif');
+  btn.addEventListener('click', function() {
+    var cur = html.getAttribute('data-font') || 'serif';
+    var next = order[(order.indexOf(cur) + 1) % order.length];
+    html.setAttribute('data-font', next);
+    try { localStorage.setItem('font', next); } catch (e) {}
+    sync(next);
+  });
 })();
 </script>
 </body>
